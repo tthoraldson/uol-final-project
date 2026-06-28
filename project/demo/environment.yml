@@ -1,0 +1,17 @@
+name: crepe-gradio
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - numpy<2
+  - pandas
+  - scipy
+  - ffmpeg
+  - libsndfile
+  - numba
+  - llvmlite
+  - pip:
+      - tensorflow==2.15.*
+      - crepe
+      - gradio

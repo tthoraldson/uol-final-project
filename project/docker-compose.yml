@@ -2,5 +2,27 @@ services:
   frontend:
     build:
       context: ./frontend
+    networks:
+      - frontend-network
     ports:
       - "5173:5173"
+
+  backend:
+    build: ./backend
+    networks:
+      - frontend-network
+      - model-network
+
+  crepe:
+    build:
+      context: ./models/CREPE
+    networks:
+      - model-network
+
+
+networks:
+  frontend-network:
+    driver: bridge
+
+  model-network:
+    driver: bridge

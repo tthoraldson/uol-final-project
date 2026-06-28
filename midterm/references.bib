@@ -1,20 +1,190 @@
-
--- Basic Pitch Model
-@inproceedings{2022_BittnerBRME_LightweightNoteTranscription_ICASSP,
-  author= {Bittner, Rachel M. and Bosch, Juan Jos\'e and Rubinstein, David and Meseguer-Brocal, Gabriel and Ewert, Sebastian},
-  title= {A Lightweight Instrument-Agnostic Model for Polyphonic Note Transcription and Multipitch Estimation},
-  booktitle= {Proceedings of the IEEE International Conference on Acoustics, Speech, and Signal Processing (ICASSP)},
-  address= {Singapore},
-  year= 2022,
+@misc{2026facebookresearch,
+  title = {Facebookresearch/Audiocraft},
+  year = 2026,
+  month = jun,
+  urldate = {2026-06-27},
+  abstract = {Audiocraft is a library for audio processing and generation with deep learning. It features the state-of-the-art EnCodec audio compressor / tokenizer, along with MusicGen, a simple and controllable music generation LM with textual and melodic conditioning.},
+  copyright = {MIT},
+  howpublished = {Meta Research}
 }
 
+@misc{2026spotify,
+  title = {Spotify/Basic-Pitch},
+  year = 2026,
+  month = jun,
+  urldate = {2026-06-27},
+  abstract = {A lightweight yet powerful audio-to-MIDI converter with pitch bend detection},
+  copyright = {Apache-2.0},
+  howpublished = {Spotify},
+  keywords = {audio,lightweight,machine-learning,midi,music,pitch-detection,polyphonic,python,transcription,typescript}
+}
 
--- Best practices for unit testing with machine learning models
-@article{yan2024unit,
-  title   = {Don't Mock Machine Learning Models In Unit Tests},
-  author  = {Yan, Ziyou},
+@misc{bittner2022lightweight,
+  title = {A {{Lightweight Instrument-Agnostic Model}} for {{Polyphonic Note Transcription}} and {{Multipitch Estimation}}},
+  author = {Bittner, Rachel M. and Bosch, Juan Jos{\'e} and Rubinstein, David and {Meseguer-Brocal}, Gabriel and Ewert, Sebastian},
+  year = 2022,
+  month = may,
+  number = {arXiv:2203.09893},
+  eprint = {2203.09893},
+  primaryclass = {cs.SD},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2203.09893},
+  urldate = {2026-06-28},
+  abstract = {Automatic Music Transcription (AMT) has been recognized as a key enabling technology with a wide range of applications. Given the task's complexity, best results have typically been reported for systems focusing on specific settings, e.g. instrument-specific systems tend to yield improved results over instrument-agnostic methods. Similarly, higher accuracy can be obtained when only estimating frame-wise \$f\_0\$ values and neglecting the harder note event detection. Despite their high accuracy, such specialized systems often cannot be deployed in the real-world. Storage and network constraints prohibit the use of multiple specialized models, while memory and run-time constraints limit their complexity. In this paper, we propose a lightweight neural network for musical instrument transcription, which supports polyphonic outputs and generalizes to a wide variety of instruments (including vocals). Our model is trained to jointly predict frame-wise onsets, multipitch and note activations, and we experimentally show that this multi-output structure improves the resulting frame-level note accuracy. Despite its simplicity, benchmark results show our system's note estimation to be substantially better than a comparable baseline, and its frame-level accuracy to be only marginally below those of specialized state-of-the-art AMT systems. With this work we hope to encourage the community to further investigate low-resource, instrument-agnostic AMT systems.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Computer Science - Sound,Electrical Engineering and Systems Science - Audio and Speech Processing},
+  file = {/Users/theresa/Zotero/storage/ZHVABSAH/Bittner et al. - 2022 - A Lightweight Instrument-Agnostic Model for Polyphonic Note Transcription and Multipitch Estimation.pdf;/Users/theresa/Zotero/storage/34P4ZYW5/2203.html}
+}
+
+@article{carnovalini2025personalized,
+  title = {Personalized {{Music Education}}: {{A Systematic Review}} of {{AI Generation Methods}}},
+  shorttitle = {Personalized {{Music Education}}},
+  author = {Carnovalini, Filippo and Esp{\'i}rito Santo, Lu{\'i}s and Wiggins, Geraint A.},
+  year = 2025,
+  journal = {IEEE Access},
+  volume = {13},
+  pages = {207433--207447},
+  issn = {2169-3536},
+  doi = {10.1109/ACCESS.2025.3639898},
+  urldate = {2026-06-28},
+  abstract = {Despite recent notable advances of AI-Education research, formal music education is still largely performed as it was at the beginning of the last century. Instrument technical practice especially is still largely performed in a classical setting with little use of modern technologies, possibly due to being a skill-based curriculum. While other researchers have argued for the potential benefits of using Artificial Intelligence for the personalization of music education, it still seems to be rare both in schools and in research. In this paper, we present a systematic literature review exploring the use of computational generation of exercises for personalized music learning, with a special interest in piano. To do so, we retrieve research papers that use AI to improve personalization in music education exploring both what computational methods can provide personalization in music teaching, and how frequently AI is actually used for generation in this context. We screened 360 papers retrieved from online repositories, selecting 40 relevant papers that would satisfy some minimal quality requirements. Analyzing the papers, we found that while there is interest from the scientific community in improving music education through AI and computational means more generally, AI is under-utilized for generation despite its potential for personalization. We found no examples of generation of piano technical exercises, and, more generally, that instrumental technique is indeed the aspect that has seen lesser use of AI enhancement, often limited to adding visualizations to normal instrumental practice.},
+  keywords = {AI-education,Artificial intelligence,Computer science,Education,Europe,generative AI,Generative AI,Instruments,Music,music education,music generation,personalization,Surveys,systematic literature review,Systematic literature review,Visualization},
+  file = {/Users/theresa/Zotero/storage/V89ZXZSL/Carnovalini et al. - 2025 - Personalized Music Education A Systematic Review of AI Generation Methods.pdf}
+}
+
+@misc{copet2024simple,
+  title = {Simple and {{Controllable Music Generation}}},
+  author = {Copet, Jade and Kreuk, Felix and Gat, Itai and Remez, Tal and Kant, David and Synnaeve, Gabriel and Adi, Yossi and D{\'e}fossez, Alexandre},
+  year = 2024,
+  month = jan,
+  number = {arXiv:2306.05284},
+  eprint = {2306.05284},
+  primaryclass = {cs.SD},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2306.05284},
+  urldate = {2026-06-27},
+  abstract = {We tackle the task of conditional music generation. We introduce MusicGen, a single Language Model (LM) that operates over several streams of compressed discrete music representation, i.e., tokens. Unlike prior work, MusicGen is comprised of a single-stage transformer LM together with efficient token interleaving patterns, which eliminates the need for cascading several models, e.g., hierarchically or upsampling. Following this approach, we demonstrate how MusicGen can generate high-quality samples, both mono and stereo, while being conditioned on textual description or melodic features, allowing better controls over the generated output. We conduct extensive empirical evaluation, considering both automatic and human studies, showing the proposed approach is superior to the evaluated baselines on a standard text-to-music benchmark. Through ablation studies, we shed light over the importance of each of the components comprising MusicGen. Music samples, code, and models are available at https://github.com/facebookresearch/audiocraft},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Computer Science - Sound,Electrical Engineering and Systems Science - Audio and Speech Processing},
+  file = {/Users/theresa/Zotero/storage/NA822WLH/Copet et al. - 2024 - Simple and Controllable Music Generation.pdf;/Users/theresa/Zotero/storage/SEWILID4/2306.html}
+}
+
+@misc{crepe,
+  title = {Crepe/Convert.Py at Gh-Pages {$\cdot$} Marl/Crepe},
+  urldate = {2026-06-28},
+  howpublished = {https://github.com/marl/crepe/blob/gh-pages/convert.py},
+  file = {/Users/theresa/Zotero/storage/XINQK66E/convert.html}
+}
+
+@misc{crepea,
+  title = {{{CREPE Interactive Demo}}},
+  urldate = {2026-06-28},
+  howpublished = {https://marl.github.io/crepe/},
+  file = {/Users/theresa/Zotero/storage/VV9TFPHZ/crepe.html}
+}
+
+@misc{empowering,
+  title = {Empowering {{Students}} through {{Sight Reading}}},
+  year = 2024,
+  month = dec,
+  journal = {https://nafme.org/},
+  urldate = {2026-06-28},
+  abstract = {A Guide for Music Teachers},
+  langid = {american}
+}
+
+@article{hayward2009relationships,
+  title = {Relationships among {{Music Sight-Reading}} and {{Technical Proficiency}}, {{Spatial Visualization}}, and {{Aural Discrimination}}},
+  author = {Hayward, Carol M. and Gromko, Joyce Eastlund},
+  year = 2009,
+  journal = {Journal of Research in Music Education},
+  volume = {57},
+  number = {1},
+  eprint = {40204946},
+  eprinttype = {jstor},
+  pages = {26--36},
+  publisher = {[MENC: The National Association for Music Education, Sage Publications, Inc.]},
+  issn = {0022-4294},
+  urldate = {2026-06-27},
+  abstract = {The purpose of this study was to examine predictors of music sight-reading ability. The authors hypothesized that speed and accuracy of music sight-reading would be predicted by a combination of aural pattern discrimination, spatial-temporal reasoning, and technical proficiency. Participants (N = 70) were wind players in concert bands at a medium-sized university in the Midwest. In a regression analysis with music sight-reading as the criterion variable, aural-spatial patterning and technical proficiency explained 51 \% of the variance, F = 37.34, p {$<$} .0001. These results support previous research that suggested that auditory, visual, spatial, and kinesthetic activations occur in coordination when wind players sight-read music notation. The results of the regression analysis suggested that although aural-spatial skills and technical proficiency skills were orthogonal, or separate, they both were essential to the complex task of sight-reading.},
+  file = {/Users/theresa/Zotero/storage/NYDEM32F/Hayward and Gromko - 2009 - Relationships among Music Sight-Reading and Technical Proficiency, Spatial Visualization, and Aural.pdf}
+}
+
+@misc{kim2018crepe,
+  title = {{{CREPE}}: {{A Convolutional Representation}} for {{Pitch Estimation}}},
+  shorttitle = {{{CREPE}}},
+  author = {Kim, Jong Wook and Salamon, Justin and Li, Peter and Bello, Juan Pablo},
+  year = 2018,
+  month = feb,
+  number = {arXiv:1802.06182},
+  eprint = {1802.06182},
+  primaryclass = {eess.AS},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.1802.06182},
+  urldate = {2026-06-27},
+  abstract = {The task of estimating the fundamental frequency of a monophonic sound recording, also known as pitch tracking, is fundamental to audio processing with multiple applications in speech processing and music information retrieval. To date, the best performing techniques, such as the pYIN algorithm, are based on a combination of DSP pipelines and heuristics. While such techniques perform very well on average, there remain many cases in which they fail to correctly estimate the pitch. In this paper, we propose a data-driven pitch tracking algorithm, CREPE, which is based on a deep convolutional neural network that operates directly on the time-domain waveform. We show that the proposed model produces state-of-the-art results, performing equally or better than pYIN. Furthermore, we evaluate the model's generalizability in terms of noise robustness. A pre-trained version of CREPE is made freely available as an open-source Python module for easy application.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Machine Learning,Computer Science - Sound,Electrical Engineering and Systems Science - Audio and Speech Processing,Statistics - Machine Learning},
+  file = {/Users/theresa/Zotero/storage/4G36R8RA/Kim et al. - 2018 - CREPE A Convolutional Representation for Pitch Estimation.pdf;/Users/theresa/Zotero/storage/RS9EDGNJ/1802.html}
+}
+
+@misc{sight,
+  title = {Sight {{Reading Trainer}}},
+  urldate = {2026-06-28},
+  howpublished = {https://sightreading.training/},
+  file = {/Users/theresa/Zotero/storage/AU4848RK/sightreading.training.html}
+}
+
+@misc{sighta,
+  title = {Sight {{Reading Factory}}\textregistered},
+  urldate = {2026-06-28},
+  abstract = {SightReadingFactory.com makes practicing the important skill of sight reading quick, easy, effective and fun! This cloud-based service allows you to customize and generate unlimited sight reading examples instantly, on-demand for students of all ages and abilities.},
+  howpublished = {https://www.sightreadingfactory.com},
+  langid = {english}
+}
+
+@misc{wang2025notagen,
+  title = {{{NotaGen}}: {{Advancing Musicality}} in {{Symbolic Music Generation}} with {{Large Language Model Training Paradigms}}},
+  shorttitle = {{{NotaGen}}},
+  author = {Wang, Yashan and Wu, Shangda and Hu, Jianhuai and Du, Xingjian and Peng, Yueqi and Huang, Yongxin and Fan, Shuai and Li, Xiaobing and Yu, Feng and Sun, Maosong},
+  year = 2025,
+  month = mar,
+  number = {arXiv:2502.18008},
+  eprint = {2502.18008},
+  primaryclass = {cs.SD},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2502.18008},
+  urldate = {2026-06-28},
+  abstract = {We introduce NotaGen, a symbolic music generation model aiming to explore the potential of producing high-quality classical sheet music. Inspired by the success of Large Language Models (LLMs), NotaGen adopts pre-training, fine-tuning, and reinforcement learning paradigms (henceforth referred to as the LLM training paradigms). It is pre-trained on 1.6M pieces of music in ABC notation, and then fine-tuned on approximately 9K high-quality classical compositions conditioned on "period-composer-instrumentation" prompts. For reinforcement learning, we propose the CLaMP-DPO method, which further enhances generation quality and controllability without requiring human annotations or predefined rewards. Our experiments demonstrate the efficacy of CLaMP-DPO in symbolic music generation models with different architectures and encoding schemes. Furthermore, subjective A/B tests show that NotaGen outperforms baseline models against human compositions, greatly advancing musical aesthetics in symbolic music generation.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Sound,Electrical Engineering and Systems Science - Audio and Speech Processing},
+  file = {/Users/theresa/Zotero/storage/JDRNG2Y6/Wang et al. - 2025 - NotaGen Advancing Musicality in Symbolic Music Generation with Large Language Model Training Paradi.pdf;/Users/theresa/Zotero/storage/PVJKKIUW/2502.html}
+}
+
+@misc{yan2022writing,
+  title = {Writing {{Robust Tests}} for {{Data}} \& {{Machine Learning Pipelines}}},
+  author = {Yan, Eugene},
+  year = 2022,
+  month = sep,
   journal = {eugeneyan.com},
-  year    = {2024},
-  month   = {Feb},
-  url     = {https://eugeneyan.com/writing/unit-testing-ml/}
+  urldate = {2026-06-26},
+  abstract = {Or why I should write fewer integration tests.},
+  chapter = {posts},
+  howpublished = {https://eugeneyan.com/writing/testing-pipelines/},
+  langid = {english},
+  file = {/Users/theresa/Zotero/storage/FIARARL8/testing-pipelines.html}
+}
+
+@misc{yan2024dont,
+  title = {Don't {{Mock Machine Learning Models In Unit Tests}}},
+  author = {Yan, Eugene},
+  year = 2024,
+  month = feb,
+  journal = {eugeneyan.com},
+  urldate = {2026-06-26},
+  abstract = {How unit testing machine learning code differs from typical software practices},
+  chapter = {posts},
+  howpublished = {https://eugeneyan.com/writing/unit-testing-ml/},
+  langid = {english},
+  file = {/Users/theresa/Zotero/storage/6WVH6TEF/unit-testing-ml.html}
 }
