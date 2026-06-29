@@ -4,6 +4,71 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import librosa
+import json
+import ast
+import uuid
+from pathlib import Path
+import abjad
+
+OUTPUT_DIR = Path("generated_scores")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+
+def parse_notes_string(notes_string):
+        # Already a Python list
+    if isinstance(notes_string, list):
+        return notes_string
+
+    # String representation of a list
+    if isinstance(notes_string, str):
+        try:
+            parsed = ast.literal_eval(notes_string)
+            if isinstance(parsed, list):
+                return parsed
+        except Exception:
+            pass
+
+
+def note_to_abjad(note_name, duration="4"):
+    pitch = note_name[:-1].lower()
+    octave = int(note_name[-1])
+
+    # LilyPond octave notation:
+    # C4 = c'
+    if octave >= 4:
+        octave_marks = "'" * (octave - 3)
+    else:
+        octave_marks = "," * (3 - octave)
+
+    return f"{pitch}{octave_marks}{duration}"
+
+
+def render_notes_to_abjad_image(notes_string, clef="bass"):
+    notes = parse_notes_string(notes_string)
+
+    abjad_notes = [
+        abjad.Note(note_to_abjad(note))
+        for note in notes
+    ]
+
+    staff = abjad.Staff(abjad_notes)
+    abjad.attach(abjad.Clef(clef), staff[0])
+
+    file_id = uuid.uuid4().hex
+    output_path = OUTPUT_DIR / file_id
+
+    result = abjad.persist.as_png(staff, str(output_path))
+
+    # Abjad usually returns a tuple like:
+    # ('generated_scores/abc123.png', ...)
+    if isinstance(result, tuple):
+        print(result)
+        return result[0][0]
+
+    return str(output_path.with_suffix(".png"))
+
+def generate_score_midi():
+    return
 
 def analyze_pitch(audio):
     """
@@ -47,8 +112,9 @@ def analyze_pitch(audio):
         avg_pitch = confident["frequency_hz"].mean()
         plot = plot_pitch(df)
         notes = estimate_notes_per_second(df)
+        score = render_notes_to_abjad_image(notes)
 
-    return df, plot, notes
+    return df, plot, notes, score
 
 def plot_pitch(df):
     fig, ax = plt.subplots(figsize=(8, 4))
@@ -96,22 +162,59 @@ def estimate_notes_per_second(df, confidence_threshold=0.7):
 
     return notes
 
-demo = gr.Interface(
-    fn=analyze_pitch,
-    inputs=gr.Audio(
-        sources=["microphone", "upload"],
-        type="numpy",
-        label="Record or upload audio"
-    ),
-    outputs=[
-        gr.Dataframe(label="Pitch Detection Results"),
-        gr.Plot(label="Pitch Plot"),
-        gr.Text(label="Note")
-    ],
-    title="Sight Reading",
-    description="Record or upload audio and analyze pitch using CREPE."
-)
+with gr.Blocks() as demo:
+    gr.Markdown("# Sight Reading")
 
+    with gr.Tab("Analyze Pitch"):
+        audio_input = gr.Audio(
+            sources=["microphone", "upload"],
+            type="numpy",
+            label="Record or upload audio"
+        )
 
-if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860)
+        pitch_df = gr.Dataframe(label="Pitch Detection Results")
+        pitch_plot = gr.Plot(label="Pitch Plot")
+        notes_text = gr.Text(label="Notes Per Second")
+        score = gr.Image(label="Rendered Score")
+
+        analyze_button = gr.Button("Analyze")
+
+        analyze_button.click(
+            fn=analyze_pitch,
+            inputs=audio_input,
+            outputs=[pitch_df, pitch_plot, notes_text, score]
+        )
+
+    # with gr.Tab("Create Scores / MIDI"):
+    #     key_input = gr.Dropdown(
+    #         choices=["C", "G", "D", "A", "F", "Bb"],
+    #         value="C",
+    #         label="Key"
+    #     )
+
+    #     measures_input = gr.Slider(
+    #         minimum=1,
+    #         maximum=16,
+    #         value=4,
+    #         step=1,
+    #         label="Measures"
+    #     )
+
+    #     difficulty_input = gr.Dropdown(
+    #         choices=["Easy", "Medium", "Hard"],
+    #         value="Easy",
+    #         label="Difficulty"
+    #     )
+
+    #     generate_button = gr.Button("Generate Score / MIDI")
+
+    #     score_output = gr.Textbox(label="Generated Notes")
+    #     midi_output = gr.File(label="Download MIDI")
+
+    #     generate_button.click(
+    #         fn=generate_score_midi,
+    #         inputs=[key_input, measures_input, difficulty_input],
+    #         outputs=[score_output, midi_output]
+    #     )
+
+demo.launch(server_name="0.0.0.0", server_port=7860)
