@@ -73,6 +73,10 @@ sightreading.training only supports MIDI and the virtual piano. If you have an i
 
 ## Exploring Sight Reading in Education
 
+Understanding sight-reading, and how to improve this ability has been an area of study for over 100 years. One research study shows that aural-spatial skills (ear training) and technical proficiency skills were both essential to sight reading[@hayward2009relationships].
+
+In more recent times, a review was done on AI-education reserach related to music education. It concludes that "AI is under-utilized for generation despite it's potential for generation"[@carnovalini2025personalized]. The music generation part of the literature review goes deeper into music generation related to sight-reading exercises.
+
 ## Pitch Estimation and Tempo Estimation
 
 There are lots of existing pre-trained models available that do different tasks related to music. This is an overview of the models I found most relevent to this project, and the models that I will test for usage in this project.
@@ -83,16 +87,27 @@ CREPE is a deep convolutional neural network that does pitch estimation [@kim201
 
 There is also a demo of CREPE[@crepea] that runs fully in the browser using Tensorflow JS (tfjs)[@tensorflowjs]. It shows real time pitch estimation based on microphone input. In regards to this project, being able to have real time pitch estimation would allow for immediate feedback on a music passage.
 
+### TempoCNN
+
+TempoCNN[@schreiber2018singlestep] is a group ofConvoluntional Neural Network (CNN) models that estimate a given audio file's tempo, measured in beats per minute (BPM). These modes were trained on datasets that included mainly ballroom dancing music, and electronic dance music. This paper does note that there is a lack of various genres of music, including jazz, classical or reggage, and believes that the models would perform better if they had found and included this kind of data.
+
+For my project "Sight Reader Pro", I believe TempoCNN is a good candidate model for being able to automatically detect the tempo that the user's recording was played at, and also use it for giving feedback on a given passage.
 
 ## Music Generation
 
 ### Basic Pitch
 
-Basic Pitch is a model built by spotify that
+Basic Pitch[@bittner2022lightweight] is a model built by spotify that takes in an audio file (.wav or .mp3), and returns a MIDI file containing either the single pitch (one instrument/voice) or multi pitch (multiple intruments/voices/notes). Basic Pitch works in the realm of "Automatic Music Transcription", an area of research used to automatically create symbolic representations of music.
+
+I believe Basic Pitch is a good candidate model that I can use to create backing tracks, and be able to have them stored as midi files. This way the project can take advantage of technologies such as WebMIDI[@2026web] for playback of a generated passage.
 
 ### MusicGEN
 
-In "Simple and Controllable Music Generation", 
+In "Simple and Controllable Music Generation", Meta AI descibes a Language Model called MusicGEN[@copet2024simple]. MusicGEN is capable of taking a text based input, and generating a full song. This model can also be prompted with an existing melody and a text prompt, and ouput a song based on the original melody.
+
+This series of models is promising for offering customized backing tracks for generated sight reading exercies. The exercises could be tailored to include the correct genere of backing track.
+
+While the music generated is really high quality, the models are also large and require a lot of compute. The smallest model in the MusicGEN model series contains 300 million parameters, and requires ~16gb of GPU RAM to run.
 
 ### NotaGen
 
