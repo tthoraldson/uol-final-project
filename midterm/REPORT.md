@@ -89,7 +89,7 @@ There is also a demo of CREPE[@crepea] that runs fully in the browser using Tens
 
 ### TempoCNN
 
-TempoCNN[@schreiber2018singlestep] is a group of Convoluntional Neural Network (CNN) models that estimate a given audio file's tempo, measured in beats per minute (BPM). These modes were trained on datasets that included mainly ballroom dancing music, and electronic dance music. This paper does note that there is a lack of various genres of music, including jazz, classical or reggag, and believes that the models would perform better if they had found and included this kind of data.
+TempoCNN[@schreiber2018singlestep] is a group of Convolutional Neural Network (CNN) models that estimate a given audio file's tempo, measured in beats per minute (BPM). These modes were trained on datasets that included mainly ballroom dancing music, and electronic dance music. This paper does note that there is a lack of various genres of music, including jazz, classical or reggae, and believes that the models would perform better if they had found and included this kind of data.
 
 For my project "Sight Reader Pro", I believe TempoCNN is a good candidate model for being able to automatically detect the tempo that the user's recording was played at, and also use it for giving feedback on a given passage.
 
@@ -171,11 +171,11 @@ This mockup shows the Exercise History screen. This screen has all of the exerci
 
 ### Good experience with or without an account
 
-My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page if a user is logged in or if they're anonomyous.
+My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page if a user is logged in or if they're anonymous.
 
 ### Customizable Exercise Settings
 
-The settings to generate sight-reading exercises will allow users to generate exercises that are specific them. For example, I only would want to see bass clef exercises that have a jazzy theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
+The settings to generate sight-reading exercises will allow users to generate exercises that are specific to them. For example, I only would want to see bass clef exercises that have a jazzy theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
 
 ## Project Structure
 
@@ -187,7 +187,7 @@ The frontend will be a web application, and it will use the React[@react] librar
 
 The backend API will be written in Python, and will use the FastAPI[@fastapi] library for all of the API calls. The backendAPI will make calls to the model-specific Docker[@docker] containers where the models are hosted/deployed.
 
-Each model will be hosted in it's own container, and will have a single FastAPI[@fastapi] endpoint for running inference on the model. The exact models that will be used for generating sight-reading exercises is still being researched.
+Each model will be hosted in its own container, and will have a single FastAPI[@fastapi] endpoint for running inference on the model. The exact models that will be used for generating sight-reading exercises are still being researched.
 
 PostgreSQL[@group2026postgresql] will be used as the database for the application, and will be in it's own container. PostgreSQL will be used for storing the data related to each exercise, including the settings used to generate it.
 
@@ -199,34 +199,34 @@ Docker[@docker], and Docker Compose will be utilized to containerize the entire 
 
 ## Project Plan
 
-TODO: GANTT chart
+![Project Gantt Chart](images/gantt.png)
 
 ## Testing/Evaluation Plan
 
-### Frontend
-
-### Backend API
-
-### Backend Models
-
 ### End-to-end
 
+I will have a handful of end to end tests that ensure that the entire application is working as expected. I will have at least 10 pre-recorded audio samples that I will measure against exercises that have already been generated. The success criteria for these tests is 90%.
+
 ### User feedback
+
+This project is going to use user feedback as the main success criteria. I will recruit musicians of different abilities to use the application, fill out a survey with their music related history (technical ability, etc) and to use the application at different phases during development. My goal is to get 5 musicians to use the application.
+
+I will have questionnaires for each major feature release, so the main testing users can give relevant feedback for that feature, and the application as a whole.
 
 # Feature Prototype
 <!-- A feature prototype: this is the only new element of the submission, details below (max 1500 words). -->
 
 ## Proving out a note recognition model
 
-I believe the hardest part of this project will be recognizing notes from any instrument, and then plotting them against the original exercise and checking for accuracy. For a basic prototype, I wanted to build the pipeline that takes in audio, and then creates a music engraving/sheet music based on what was played. 
+I believe the hardest part of this project will be recognizing notes from any instrument, and then plotting them against the original exercise and checking for accuracy. For a basic prototype, I wanted to build a pipeline that takes in audio, and then creates a music engraving/sheet music based on what was played. 
 
 ### Iterating quickly with Gradio
 
-To test out models quickly, I wanted to keep my "frontend" as close as possible to Python, where I would be testing various models. I've used Gradio[@abid2019gradio] at work in the past, and found it's easy syntax for spinning up Python based web demos to be perfect. Gradio already has simple components like getting audio
+To test out models quickly, I wanted to keep my "frontend" as close as possible to Python, where I would be testing various models. I've used Gradio[@abid2019gradio] at work in the past, and found its easy syntax for spinning up Python based web demos to be perfect. Gradio already has simple components like getting audio
 
 ### Utilizing the CREPE model
 
-Installing the CREPE[@kim2018crepe] model to test out was simple, as it has a python library available on PIP[@crepeb]. The library allows to choose between the different model sizes (tiny, small, medium etc), and allows for different "step sizes", or how often the given audio track will be sampled and have it's frequency analyzed.
+Installing the CREPE[@kim2018crepe] model to test out was simple, as it has a python library available on PIP[@crepeb]. The library allows the developer to choose between the different model sizes (tiny, small, medium etc), and allows for different "step sizes", or how often the given audio track will be sampled and have its frequency analyzed.
 
 
 
@@ -243,7 +243,7 @@ The CREPE[@kim2018crepe] model output contains a frequency in hertz, and a confi
 
 To try and get a better understanding of the data that was coming out of the model, I plotted the predicted frequency and confidence markers on a graph. The red dots over the line graph indicate the model was at least 70% confident in that prediction.
 
-As can be seen in the demo, there are a few outliers that have confidence maker, which means I probably need to increase the confidence threshold in the real application.
+As can be seen in the demo, there are a few outliers that have confidence marker, which means I probably need to increase the confidence threshold in the real application.
 
 ![Demo input and model output](images/demo3.png){width=300px}
 
@@ -259,7 +259,7 @@ The python environment in general was very easy to prototype in, and make lots o
 
 ### What needs improvement
 
-While lilypond works in the demo, it took forever to get setup and the rendered music engraving was average. It rendered an entire PDF, which had to be saved as a PNG, and then passed to Gradio[@abid2019gradio] for it to be rendered. In the future, I would like the python side to create only what's needed for the frontend to render the music engraving, saving the output in abc notation[@abc], or something similar.
+While lilypond works in the demo, it took forever to get set up and the rendered music engraving was average. It rendered an entire PDF, which had to be saved as a PNG, and then passed to Gradio[@abid2019gradio] for it to be rendered. In the future, I would like the python side to create only what's needed for the frontend to render the music engraving, saving the output in abc notation[@abc], or something similar.
 
 As mentioned in above paragraphs, the confidence interval for the CREPE model needs to be adjusted so random background noise is not included in the eventual music engraving.
 
@@ -273,5 +273,6 @@ While Gradio[@abid2019gradio] was nice for a quick prototype, the framework is n
 - [Pandoc](https://pandoc.org/) was used to generate this report from a markdown file
 - [Zotero](https://www.zotero.org/) was used to manage sources, and generate a BibTex file for references/citations
 - [draw.io](https://www.drawio.com/) was used for all of the Sight Reader Pro mockups
+- [Online Gantt](https://www.onlinegantt.com/#/gantt) for creating the gantt chart image
 
 # References
