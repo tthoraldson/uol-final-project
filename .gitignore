@@ -2,3 +2,6 @@ ieee.csl
 .DS_Store
 project/frontend/src/node_modules
 project/demo/generated_scores
+notes.md
+project/frontend/src/build
+.venv2

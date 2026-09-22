@@ -1,24 +1,33 @@
 {
-  "name": "frontend",
+  "name": "Sight Reader Pro",
   "version": "1.0.0",
+  "homepage": "https://tthoraldson.github.io/uol-final-project",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "deploy": "gh-pages -d build"
   },
   "author": "Theresa Thoraldson",
   "license": "ISC",
   "dependencies": {
     "@huggingface/transformers": "^4.3.0",
+    "@huggingface/transformers-structured-output": "^4.3.0",
+    "@jax-js/jax": "^0.1.25",
     "bootstrap": "^5.3.8",
     "react": "^19.2.7",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.7",
+    "react-h5-audio-player": "^3.10.2",
     "vexflow": "^5.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.1.1",
-    "vite": "^8.3.0"
+    "gh-pages": "^6.3.0",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1",
+    "vitest-browser-react": "^2.3.0"
   }
 }
