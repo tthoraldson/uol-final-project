@@ -1,23 +1,11 @@
 services:
-  frontend:
+  text-to-music:
     build:
-      context: ./frontend
+      context: ./backend/text-to-music
     networks:
-      - frontend-network
+      - model-network
     ports:
-      - "5173:5173"
-
-  backend:
-    build: ./backend
-    networks:
-      - frontend-network
-      - model-network
-
-  crepe:
-    build:
-      context: ./models/CREPE
-    networks:
-      - model-network
+      - "8080:8080"
 
 
 networks:

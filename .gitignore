@@ -5,3 +5,4 @@ project/demo/generated_scores
 notes.md
 project/frontend/src/build
 .venv2
+.env
