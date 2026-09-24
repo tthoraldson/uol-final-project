@@ -6,11 +6,12 @@ import logging
 import mlflow
 import time
 import os
+from fastapi import FastAPI
 
 
 logger = logging.getLogger(__name__)
 
-# setup ML
+# setup MLFlow
 MLFLOW_URI = os.getenv("MLFLOW_TRACKING_URI", "http://host.docker.internal:5050")
 mlflow.set_tracking_uri(MLFLOW_URI)
 mlflow.enable_system_metrics_logging()
@@ -18,8 +19,6 @@ mlflow.enable_system_metrics_logging()
 tokenizer = AutoTokenizer.from_pretrained('sander-wood/text-to-music')
 model = AutoModelForSeq2SeqLM.from_pretrained('sander-wood/text-to-music')
 model = model
-
-from fastapi import FastAPI
 
 app = FastAPI()
 

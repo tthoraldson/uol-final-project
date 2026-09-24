@@ -1,1 +1,5 @@
 basic-pitch[onnx]
+fastapi
+uvicorn
+mlflow
+psutil

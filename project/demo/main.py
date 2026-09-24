@@ -80,11 +80,10 @@ def analyze_pitch(audio):
 
     sr, y = audio
 
-    # Convert stereo to mono if needed
     if len(y.shape) > 1:
         y = np.mean(y, axis=1)
 
-    # Normalize audio
+
     y = y.astype(np.float32)
     if np.max(np.abs(y)) > 0:
         y = y / np.max(np.abs(y))
@@ -148,7 +147,6 @@ def estimate_notes_per_second(df, confidence_threshold=0.7):
     # Keep only confident predictions
     df = df[df["confidence"] >= confidence_threshold].copy()
 
-    # Convert frequency -> note name
     df["note"] = librosa.hz_to_note(df["frequency_hz"])
 
     # Group predictions by whole second
@@ -184,37 +182,5 @@ with gr.Blocks() as demo:
             inputs=audio_input,
             outputs=[pitch_df, pitch_plot, notes_text, score]
         )
-
-    # with gr.Tab("Create Scores / MIDI"):
-    #     key_input = gr.Dropdown(
-    #         choices=["C", "G", "D", "A", "F", "Bb"],
-    #         value="C",
-    #         label="Key"
-    #     )
-
-    #     measures_input = gr.Slider(
-    #         minimum=1,
-    #         maximum=16,
-    #         value=4,
-    #         step=1,
-    #         label="Measures"
-    #     )
-
-    #     difficulty_input = gr.Dropdown(
-    #         choices=["Easy", "Medium", "Hard"],
-    #         value="Easy",
-    #         label="Difficulty"
-    #     )
-
-    #     generate_button = gr.Button("Generate Score / MIDI")
-
-    #     score_output = gr.Textbox(label="Generated Notes")
-    #     midi_output = gr.File(label="Download MIDI")
-
-    #     generate_button.click(
-    #         fn=generate_score_midi,
-    #         inputs=[key_input, measures_input, difficulty_input],
-    #         outputs=[score_output, midi_output]
-    #     )
 
 demo.launch(server_name="0.0.0.0", server_port=7860)
