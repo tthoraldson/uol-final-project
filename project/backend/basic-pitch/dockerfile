@@ -1,0 +1,14 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY src/requirements.txt .
+
+RUN apt-get update && apt-get install -y curl && \
+    curl -L https://github.com/spotify/basic-pitch/raw/refs/heads/main/basic_pitch/saved_models/icassp_2022/nmp.onnx -o ./nmp.onnx
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY src/ .
+
+CMD ["python", "main.py"]

@@ -1,11 +1,29 @@
 services:
-  text-to-music:
+  frontend:
     build:
-      context: ./backend/text-to-music
+      context: ./frontend/
+    networks:
+      - frontend-network
+    ports:
+      - "3005:3005"
+
+  # text-to-music:
+  #   build:
+  #     context: ./backend/text-to-music
+  #   networks:
+  #     - model-network
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - "GIT_PYTHON_REFRESH: quiet"
+
+  basic-pitch:
+    build:
+      context: ./backend/basic-pitch
     networks:
       - model-network
     ports:
-      - "8080:8080"
+      - "8082:8082"
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:v2.11.5
