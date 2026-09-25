@@ -3,3 +3,7 @@ fastapi
 uvicorn
 mlflow
 psutil
+visual_midi
+pretty_midi
+numpy==1.24.4
+bokeh==2.4.3

@@ -1,0 +1,9 @@
+#paper {
+  width: 100%;
+  overflow-x: auto;
+  text-align: center;
+}
+
+#paper svg {
+  display: inline-block;
+}

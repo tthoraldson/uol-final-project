@@ -26,19 +26,19 @@ app = FastAPI()
 async def home():
     print("hello, world")
 
-@app.get("/song")
-async def generateSong(text: str, max_length: int = 1028, top_p: float=0.9, temperature: float=1.0):
+@app.get("/generate")
+async def generateSong(prompt: str, max_length: int = 1028, top_p: float=0.9, temperature: float=1.0):
     logger.warning('starting to generate song')
     mlflow.set_experiment("Text-to-Music-Generation")
 
     with mlflow.start_run():
-        mlflow.log_param("prompt_text", text)
+        mlflow.log_param("prompt_text", prompt)
         mlflow.log_param("max_length", max_length)
         mlflow.log_param("top_p", top_p)
         mlflow.log_param("temperature", temperature)
         start_time = time.perf_counter()
 
-        input_ids = tokenizer(text, 
+        input_ids = tokenizer(prompt, 
                             return_tensors='pt', 
                             truncation=True, 
                             max_length=max_length)['input_ids']

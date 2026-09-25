@@ -1,61 +1,75 @@
-import { useEffect } from "react";
-import Container from 'react-bootstrap/Container';
-import VexFlow from 'vexflow';
-import { TextToMusic } from '../functions/text-to-music';
+import { useEffect, useRef } from "react";
+import ABCJS from "abcjs";
+import Recorder from "./record";
 
+// @ts-expect-error - hates importing CSS this way
+import "./music.css";
+import { Container, Row } from "react-bootstrap";
+
+// starter code was from this abcjs example: https://examples.abcjs.net/full-synth.html
 function Music() {
-    useEffect(() => {
-    initializeSomething();
-  }, []);
+  const paperRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLDivElement>(null);
 
-  function initializeSomething() {
-    // Testing out vexflow functionality
-    const { Factory } = VexFlow;
-    const vf = new Factory({
-    renderer: { elementId: 'vexflow', width: 800, height: 200 },
+  useEffect(() => {
+    if (!paperRef.current || !audioRef.current) {
+      return;
+    }
+
+    const abc = `
+X:1
+T:C Major Scale
+M:4/4
+L:1/4
+K:C clef=bass
+C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
+C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
+C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
+`;
+
+    // Render the sheet music
+    const visualObj = ABCJS.renderAbc(paperRef.current, abc, { scale: 1.5 });
+
+    // Create the audio player
+    const synthControl = new ABCJS.synth.SynthController();
+
+    synthControl.load("#audio", null, {
+      displayRestart: true,
+      displayPlay: true,
+      displayProgress: true,
     });
 
-    const score = vf.EasyScore();
-    const system = vf.System();
+    // Create and initialize the sound buffer
+    const createSynth = new ABCJS.synth.CreateSynth();
 
-    system
-    .addStave({
-        voices: [
-        score.voice(score.notes('C#5/q, B4, A4, G#4')),  
-        ],
-    })
-    .addClef('bass')
-    .addTimeSignature('2/4');
+    createSynth
+      .init({
+        visualObj: visualObj[0],
+      })
+      .then(() => {
+        return synthControl.setTune(visualObj[0], false);
+      })
+      .then(() => {
+        console.log("Audio loaded");
+      })
+      .catch((error) => {
+        console.error("Audio problem:", error);
+      });
+  }, []);
 
-    vf.draw();
+  return (
+    <>
+      <Container></Container>
+      <Row>
+        <div ref={paperRef} />
+      </Row>
+      <Row>
+        <div id="audio" ref={audioRef} />
+      </Row>
 
-console.warn('hello');
-  }
-    return (
-        <Container>
-            <div id="vexflow"></div>
-            <button onClick={testTextToMusic}>
-                Test Text to Music
-            </button>
-        </Container>
-    )
-}
-
-async function testTextToMusic() {
-    try {
-        console.log("Starting text-to-music test...");
-
-        const textToMusic = TextToMusic.instance;
-
-        const tune = await textToMusic.generateMusic(
-            "This is a traditional Irish dance music."
-        );
-
-        console.log("Generated tune:");
-        console.log(tune);
-    } catch (error) {
-        console.error("Text-to-music test failed:", error);
-    }
+      <Recorder />
+    </>
+  );
 }
 
 export default Music;
