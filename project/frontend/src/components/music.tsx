@@ -1,31 +1,23 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ABCJS from "abcjs";
+import { Button, Container, Row } from "react-bootstrap";
+import generateMusic from "../api/text-to-music.api";
 import Recorder from "./record";
 
 // @ts-expect-error - hates importing CSS this way
 import "./music.css";
-import { Container, Row } from "react-bootstrap";
 
 // starter code was from this abcjs example: https://examples.abcjs.net/full-synth.html
 function Music() {
   const paperRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLDivElement>(null);
 
+  const [abc, setAbc] = useState("");
+
   useEffect(() => {
-    if (!paperRef.current || !audioRef.current) {
+    if (!paperRef.current || !audioRef.current || !abc) {
       return;
     }
-
-    const abc = `
-X:1
-T:C Major Scale
-M:4/4
-L:1/4
-K:C clef=bass
-C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
-C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
-C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
-`;
 
     // Render the sheet music
     const visualObj = ABCJS.renderAbc(paperRef.current, abc, { scale: 1.5 });
@@ -55,7 +47,7 @@ C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
       .catch((error) => {
         console.error("Audio problem:", error);
       });
-  }, []);
+  }, [abc]);
 
   return (
     <>
@@ -65,6 +57,19 @@ C, D, E, F, | G, A, B, C | C, D, E, F, | G, A, B, C |
       </Row>
       <Row>
         <div id="audio" ref={audioRef} />
+      </Row>
+      <Row>
+        <Button
+          onClick={async () => {
+            const result = await generateMusic(
+              "This is a short piece of jazz bass. It's in 4/4. It's 4 bars long.",
+            );
+
+            setAbc(result);
+          }}
+        >
+          Generate Music
+        </Button>
       </Row>
 
       <Recorder />

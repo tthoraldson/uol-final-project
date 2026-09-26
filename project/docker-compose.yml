@@ -24,7 +24,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - "GIT_PYTHON_REFRESH: quiet"
+      - "GIT_PYTHON_REFRESH=quiet"
+    env_file:
+      - .env
 
   basic-pitch:
     build:
@@ -34,10 +36,10 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - "GIT_PYTHON_REFRESH: quiet"
+      - "GIT_PYTHON_REFRESH=quiet"
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.11.5
+    image: ghcr.io/mlflow/mlflow:v3.16.1
     ports:
       - "5050:5050"
     networks:
@@ -51,6 +53,8 @@ services:
       --port 5050 
       --backend-store-uri sqlite:////mlflow/mlflow.db 
       --default-artifact-root /mlflow/artifacts
+    env_file:
+      - .env
 
 networks:
   frontend-network:

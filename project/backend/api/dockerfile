@@ -2,6 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
+# install abc2midi, midi2abc
+RUN apt-get update && \
+    apt-get install -y abcmidi && \
+    abc2midi -ver && \
+    midi2abc -h && \
+    rm -rf /var/lib/apt/lists/*
+
 COPY src/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
