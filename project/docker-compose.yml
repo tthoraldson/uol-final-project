@@ -36,6 +36,16 @@ services:
     env_file:
       - .env
 
+  crepe:
+    build:
+      context: ./backend/crepe
+    networks:
+      - model-network
+    ports:
+      - "8060:8060"
+    env_file:
+      - .env
+
   mlflow:
     image: ghcr.io/mlflow/mlflow:v3.16.1
     ports:
