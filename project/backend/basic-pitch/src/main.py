@@ -15,7 +15,6 @@ MLFLOW_URI = os.getenv("MLFLOW_TRACKING_URI", "http://host.docker.internal:5050"
 mlflow.set_tracking_uri(MLFLOW_URI)
 mlflow.enable_system_metrics_logging()
 
-audio_path_list = ["c-major.wav"]
 output_directory = "/"
 
 

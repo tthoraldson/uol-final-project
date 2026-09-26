@@ -2,3 +2,5 @@ fastapi
 uvicorn
 httpx
 mir_eval
+music21
+librosa

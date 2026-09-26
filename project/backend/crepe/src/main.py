@@ -25,7 +25,10 @@ async def home():
 
 
 @app.post("/pitch-tracker")
-async def getMidi(audio: UploadFile = File(...)):
+async def pitchTracker(audio: UploadFile = File(...)):
+    # TODO:
+    # [ ] Add step size param
+    # [ ] Add Viterbi param
     with tempfile.NamedTemporaryFile(
         suffix=".wav",
         delete=False

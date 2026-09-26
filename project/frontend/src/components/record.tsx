@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Card, Form, Stack } from "react-bootstrap";
+import { Button, Card, Form, Col, Row } from "react-bootstrap";
 
 interface AudioRecorderProps {
   onRecordingComplete?: (audio: Blob) => void;
 }
 
 function Recorder({ onRecordingComplete }: AudioRecorderProps) {
+  // state
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [recording, setRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [hasRecording, setHasRecording] = useState(false);
+
+  // media and audio refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -82,55 +86,88 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
   function stopRecording() {
     mediaRecorderRef.current?.stop();
     setRecording(false);
+    setHasRecording(true);
+  }
+
+  function clearRecording() {
+    if (audioUrl) {
+      URL.revokeObjectURL(audioUrl);
+    }
+
+    setAudioUrl(null);
+    setHasRecording(false);
+    chunksRef.current = [];
+  }
+
+  function analyzeRecording() {
+    console.warn("implement meeeeee");
   }
 
   return (
-    <Card>
+    <Card className="m-2">
       <Card.Body>
-        <Stack gap={3}>
-          <Card.Title>Recorder</Card.Title>
+        <Row class="mb-2">
+          <Col xs={9}>
+            <Card.Title>Recorder</Card.Title>
 
-          <Form.Group>
-            <Form.Label>Audio Input</Form.Label>
+            <Form.Group>
+              <Form.Label>Audio Input</Form.Label>
 
-            <Form.Select
-              value={selectedDevice}
-              onChange={(event) => setSelectedDevice(event.target.value)}
-              disabled={recording}
-            >
-              {devices.map((device, index) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
+              <Form.Select
+                value={selectedDevice}
+                onChange={(event) => setSelectedDevice(event.target.value)}
+                disabled={recording}
+                className="mb-2"
+              >
+                {devices.map((device, index) => (
+                  <option key={device.deviceId} value={device.deviceId}>
+                    {device.label}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+          <Col xs={3} className="d-flex flex-column justify-content-end">
+            {recording ? (
+              <Button
+                variant="danger"
+                className="w-100 mb-2"
+                onClick={stopRecording}
+              >
+                Stop Recording
+              </Button>
+            ) : hasRecording ? (
+              <>
+                <Button
+                  variant="danger"
+                  className="w-100 mb-2"
+                  onClick={clearRecording}
+                >
+                  Clear Recording
+                </Button>
 
-          <div>
-            {!recording ? (
+                <Button
+                  variant="primary"
+                  className="w-100 mb-2"
+                  onClick={analyzeRecording}
+                >
+                  Analyze
+                </Button>
+              </>
+            ) : (
               <Button
                 variant="primary"
+                className="w-100 mb-2"
                 onClick={startRecording}
                 disabled={!selectedDevice}
               >
                 Start Recording
               </Button>
-            ) : (
-              <Button variant="danger" onClick={stopRecording}>
-                Stop Recording
-              </Button>
             )}
-            {!recording && streamRef != null && (
-              <>
-                <Button variant="danger">Clear Recording</Button>
-                <Button variant="primary">Clear Recording</Button>
-              </>
-            )}
-          </div>
-
+          </Col>
           {recording && <div className="text-danger">● Recording...</div>}
-          {audioUrl && <audio controls src={audioUrl} className="w-100" />}
-        </Stack>
+          {audioUrl && <audio controls src={audioUrl} className="w-100 m-2" />}
+        </Row>
       </Card.Body>
     </Card>
   );

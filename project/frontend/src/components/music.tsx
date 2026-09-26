@@ -4,12 +4,16 @@ import { Button, Container, Row } from "react-bootstrap";
 import generateMusic from "../api/text-to-music.api";
 import { useMusic } from "./musicContext";
 import Recorder from "./record";
+import GenerateMusicModal from "./generateMusicModal";
 
 // @ts-expect-error - hates importing CSS this way
 import "./music.css";
+import React from "react";
 
 // starter code was from this abcjs example: https://examples.abcjs.net/full-synth.html
 function Music() {
+  const [modalShow, setModalShow] = React.useState(false);
+
   const paperRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLDivElement>(null);
 
@@ -60,7 +64,7 @@ function Music() {
         <div id="audio" ref={audioRef} />
       </Row>
       <Row>
-        <Button
+        {/* <Button
           onClick={async () => {
             const result = await generateMusic(
               "This is a simple song. Like kids music.",
@@ -70,10 +74,14 @@ function Music() {
           }}
         >
           Generate Music
+        </Button> */}
+        <Button variant="primary" onClick={() => setModalShow(true)}>
+          Generate Music
         </Button>
       </Row>
 
       <Recorder />
+      <GenerateMusicModal show={modalShow} onHide={() => setModalShow(false)} />
     </>
   );
 }

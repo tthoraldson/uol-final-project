@@ -7,3 +7,4 @@ project/frontend/src/build
 .venv2
 .env
 acm-sig-proceedings-long-author-list.csl
+.vitest/
