@@ -1,14 +1,12 @@
 from basic_pitch.inference import predict_and_save
 from basic_pitch import ICASSP_2022_MODEL_PATH
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
+from fastapi.responses import FileResponse
 import mlflow
 import os
 from pathlib import Path
-from tempfile import TemporaryDirectory
-from bokeh.io import export_png
-from pretty_midi import PrettyMIDI
-from visual_midi import Plotter
+from tempfile import TemporaryDirectory, NamedTemporaryFile
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +26,8 @@ async def home():
     logger.info("hello, world")
     return "Hello, World!"
 
-@app.get("/midi")
-async def getMidi(midi: str):
+@app.post("/midi")
+async def getMidi(audio: UploadFile = File(...)):
     logger.info("inside getMidi()")
     mlflow.set_experiment("Basic-Pitch-Midi-Generation")
 
@@ -42,56 +40,36 @@ async def getMidi(midi: str):
                 "save_model_outputs": False,
             })
 
-        predict_and_save(
-            audio_path_list=audio_path_list,
-            model_or_model_path="./nmp.onnx",
-            output_directory=output_directory,
-            save_midi=True,
-            sonify_midi=False,
-            save_notes=False,
-            save_model_outputs=False,
-        )
 
-        midi_files = list(
-            Path(output_directory).glob("*.mid")
-        )
+        with NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio:
+            audio_path = Path(temp_audio.name)
 
-        if not midi_files:
-            raise RuntimeError("Basic Pitch did not generate a MIDI file")
-
-        midi_file = midi_files[0]
-
-        mlflow.log_artifact(
-                str(midi_file),
-                artifact_path="midi",
+            while chunk := await audio.read(1024 * 1024):
+                temp_audio.write(chunk)
+        try: 
+            predict_and_save(
+                audio_path_list=[str(audio_path)],
+                model_or_model_path="./nmp.onnx",
+                output_directory=output_directory,
+                save_midi=True,
+                sonify_midi=False,
+                save_notes=False,
+                save_model_outputs=False,
             )
 
-        html_file = Path(output_directory) / "midi.html"
+            midi_files = list(
+                Path(output_directory).glob("*.mid")
+            )
 
-        make_midi_html(
-            str(midi_file),
-            str(html_file),
-        )
+            if not midi_files:
+                raise RuntimeError("Basic Pitch did not generate a MIDI file")
 
-        mlflow.log_artifact(
-            str(html_file),
-            artifact_path="visualization",
-        )
-
-        return {
-            "status": "success",
-            "run_id": run.info.run_id,
-            "midi": str(midi_file),
-        }
+            midi_file = midi_files[0]
 
 
-
-def make_midi_html(midi_file: str, html_file: str):
-    midi = PrettyMIDI(midi_file)
-
-    plotter = Plotter()
-
-    plotter.save(
-        midi,
-        html_file,
-    )
+        finally:
+            return FileResponse(
+                path=str(midi_file),
+                media_type="audio/midi",
+                filename="generated.mid",
+            )

@@ -1,0 +1,21 @@
+@startuml Docker Architecture
+
+node Frontend
+node "Main API"
+node "text-to-music API"
+node "basic-pitch API"
+node "CREPE API"
+node "MLFlow"
+
+Frontend -- "Main API"
+"Main API" -- "text-to-music API"
+"Main API" -- "basic-pitch API"
+"Main API" -- "CREPE API"
+
+"MLFlow" -up- "text-to-music API"
+"MLFlow" -up- "basic-pitch API"
+"MLFlow" -up- "CREPE API"
+
+"CREPE API" -[hidden]down- "MLFlow"
+
+@enduml

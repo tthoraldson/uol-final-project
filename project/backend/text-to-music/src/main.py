@@ -9,7 +9,6 @@ import time
 import os
 from fastapi import FastAPI
 import pandas as pd
-from music21 import converter, clef
 import tempfile
 from pathlib import Path
 
@@ -17,7 +16,6 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 # setup MLFlow
-#MLFLOW_URI = os.getenv("MLFLOW_TRACKING_URI", "http://host.docker.internal:5050")
 MLFLOW_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow:5050")
 mlflow.set_tracking_uri(MLFLOW_URI)
 mlflow.enable_system_metrics_logging()
@@ -38,19 +36,13 @@ async def generateSong(prompt: str, max_length: int = 524, top_p: float=0.9, tem
     mlflow.set_experiment("Text-to-Music-Generation")
 
     with mlflow.start_run():
-        # mlflow.transformers.log_model(
-        #     transformers_model={
-        #         "model": model,
-        #         "tokenizer": tokenizer,
-        #     },
-        #     artifact_path="model",
-        # )
         mlflow.log_param("prompt_text", prompt)
         mlflow.log_param("max_length", max_length)
         mlflow.log_param("top_p", top_p)
         mlflow.log_param("temperature", temperature)
         start_time = time.perf_counter()
 
+        # The bones of this main inference loop was from the model card on huggingface: https://huggingface.co/sander-wood/text-to-music
         input_ids = tokenizer(prompt, 
                             return_tensors='pt', 
                             truncation=True, 
@@ -125,16 +117,3 @@ async def generateSong(prompt: str, max_length: int = 524, top_p: float=0.9, tem
 
             mlflow.end_run()
     return {"tune": tune}
-
-
-# def first_n_bars_abc(abc_notation: str, n: int = 8):
-#     score = converter.parse(abc_notation, format="abc")
-
-#     first_bars = score.measures(1, n)
-
-#     with tempfile.TemporaryDirectory() as temp_dir:
-#         output_path = Path(temp_dir) / "output.abc"
-
-#         first_bars.write("abc", fp=str(output_path))
-
-#         return output_path.read_text()

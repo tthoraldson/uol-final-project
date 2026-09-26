@@ -4,25 +4,30 @@ subtitle: "Final Project Report - X words"
 author: "Theresa Thoraldson"
 date: 2026-09-28
 bibliography: references.bib
+toc: true
+toc-depth: 2
 ---
+
+\newpage
+This project code be found here: [https://github.com/tthoraldson/uol-final-project/](https://github.com/tthoraldson/uol-final-project/)
 
 <!-- TODO: Add total word count to subtitle -->
 
-# Introduction
+# Introduction - X words
 
 <!-- An introduction: this explains the project concept and motivation for the project (this can be based on your proposal). This must also state which project template you are using (max 1000 words). -->
 
 _The template I am choosing is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal._
 
-In music, there is a concept called sight reading. It involves being given a piece of sheet music and trying to play or sing it right away with little or no preparation. According to the National Association for Music Education, the ability to sight read music has many benefits including increased confidence, stronger foundations in rhythm and pitch, and less stress when it comes to learning new music pieces [@empowering].
+In music, there is a concept called sight-reading. It involves being given a piece of sheet music and trying to play or sing it right away with little or no preparation. According to the National Association for Music Education, the ability to sight-read music has many benefits including increased confidence, stronger foundations in rhythm and pitch, and less stress when it comes to learning new music pieces [@empowering].
 
 ## An overview
 
-"Sight Reading Pro", the name of this project, will be an application where users can practice and master sight reading. Users will be able to use any instrument of their choosing, including voice, to practice their sight reading abilities.
+"Sight Reading Pro", the name of this project, will be an application where users can practice and master sight-reading. Users will be able to use any instrument of their choosing, including voice, to practice their sight-reading abilities.
 
-![Example sight reading passage](images/passage.png){width=300px}
+![Example sight-reading passage](images/passage.png){width=300px}
 
-Sight Reading Pro will be a web based application, utilizing various state of the art machine learning models to generate music passages for users to practice their sight reading abilities. The user will get immediate feedback on attempts, including intonation (did they play the correct note?) and rhythm (did they play at the correct time?).
+Sight Reading Pro will be a web based application, utilizing various state of the art machine learning models to generate music passages for users to practice their sight-reading abilities. The user will get immediate feedback on attempts, including intonation (did they play the correct note?) and rhythm (did they play at the correct time?).
 
 Users can choose whether they want to have an account or not. If they choose to have an account, they can keep track of all of the passages they've generated, and their recorded attempts and feedback on each passage.
 
@@ -30,11 +35,11 @@ Users with or without a login will be able to customize the complexity and diffi
 
 ## Why Would People Want This Project?
 
-Personally, I've always wanted to get better at sight reading but haven't found any existing products on the market that make me stick with working through exercises. The generated exercises are often boring, and only target one music area at a time (i.e. advance rhythms, chords, harmony, etc).
+Personally, I've always wanted to get better at sight-reading but haven't found any existing products on the market that make me stick with working through exercises. The generated exercises are often boring, and only target one music area at a time (i.e. advance rhythms, chords, harmony, etc). Having the ability to customize the execrises, and adjusting them to meet my current music learning goals would be amazing.
 
-The existing free projects on the market have limited instrument support, and have no way to track exercise history. The paid options are more focused on music education, instead of individual learning goals. The paid options are also out of reach to users that want to learn sight reading, but don't have the budget to do so.
+The existing free projects on the market have limited instrument support, and have no way to track exercise history. The paid options are more focused on music education, instead of individual learning goals. The paid options are also out of reach to users that want to learn sight-reading, but don't have the budget to do so.
 
-My goals for the project are to make a free, individualized sight reading platform that can work with any instrument.
+My goals for the project are to make a free, open source, individualized sight-reading platform that can work with any instrument.
 
 ## Existing/Similar Projects
 
@@ -42,41 +47,42 @@ My goals for the project are to make a free, individualized sight reading platfo
 
 ![Sight Reading Factory screen capture](images/sightreadingfactory.png){width=300px}
 
-Sight Reading Factory[@sighta] is a platform for sight reading exercises mainly aimed towards educators. This platform supports ~30 instruments, and offers different difficulties of music passages to play. They offer generated music exercises for learners to practice with, getting feedback with each attempt at playing a passage.
+Sight Reading Factory[@sighta] is a platform for sight-reading exercises mainly aimed towards educators. This platform supports ~30 instruments, and offers different difficulties of music passages to play. They offer generated music exercises for learners to practice with, getting feedback with each attempt at playing a passage.
 
 #### Advantages
 
 Sight Reading factory has a wide variety of features, including the ability to assess how well a user did on a given passage of music, and the ability to control how difficult generated passages are by limiting the note range, tempo, and rhythmic complexity. Sight Reading Factory supports both general audio/microphone input and MIDI.
 
-Sight reading factory allows you to keep track of what passages you have generated, all of the sight reading attempts you have made on a given passage, and it offers assessments on new blind passages. This product is the most robust with features that I have found.
+Sight reading factory allows you to keep track of what passages you have generated, all of the sight-reading attempts you have made on a given passage, and it offers assessments on new blind passages. This product is the most robust with features that I have found.
 
 #### Disadvantages
 
 I believe the biggest disadvantage to Sight Reading Factory is the fact that it's a subscription, and starts at $45 per user per year. There's a free trial, but you have to enter credit card information in order to try it.
 
-Sight Reading factory supports 30 instruments, but has no generic option if your instrument is not supported. You must log in to do anything, which can be just enough friction for learners that want to try sight reading without committing to a product. This product is also heavily influenced by music educators, and a lot of the features are what you would expect to be in a classroom environment. For example, getting assigned passages to work on.
+Sight Reading factory supports 30 instruments, but has no generic option if your instrument is not supported. You must log in to do anything, which can be just enough friction for learners that want to try sight -eading without committing to a product. This product is also heavily influenced by music educators, and a lot of the features are what you would expect to be in a classroom environment. For example, getting assigned passages to work on.
 
 ### sightreading.training
 
 ![sightreading.training screen capture](images/sightreadingtraining.png){width=300px}
 
-sightreading.training[@sight] is a free and open source sight reading platform. It offers sight reading tools, and other tools for learning and playing music.
+sightreading.training[@sight] is a free and open source sight-reading platform. It offers sight-reading tools, and other tools for learning and playing music.
 
 #### Advantages
 
-sightreading.training supports MIDI, or allows the user to play on a piano that's in the browser. Having a virtual piano is a cool idea, as it makes sight reading accessible to everyone, including those that don't have an instrument of their own. This website is also free, and you can get started practicing right away. Users have the ability to login and save settings for their sight reading passages, but not the passages themselves.
+sightreading.training supports MIDI, or allows the user to play on a piano that's in the browser. Having a virtual piano is a cool idea, as it makes sight-reading accessible to everyone, including those that don't have an instrument of their own. This website is also free, and you can get started practicing right away. Users have the ability to login and save settings for their sight-reading passages, but not the passages themselves.
 
 #### Disadvantages
 
 sightreading.training only supports MIDI and the virtual piano. If you have an instrument that you can't plug into your computer, you can't use this application. There are no settings to change rhythmic complexity. All of the notes have the same length.
 
-# Literature Review
+# Literature Review - X words
 
-<!-- A literature review: this is a revised version of the document that you submitted for your second peer review (max 2500 words). -->
+<!-- TODO: Add Literature Review Word Count -->
+<!-- this is a revised version of the chapter from your draft report, to include any further work you may have done since then, and to incorporate the feedback you have obtained from your submissions. (max 2500 words) -->
 
-## Exploring Sight Reading in Education
+## Exploring Sight-Reading in Education
 
-Understanding sight-reading, and how to improve this ability has been an area of study for over 100 years. One research study shows that aural-spatial skills (ear training) and technical proficiency skills were both essential to sight reading[@hayward2009relationships].
+Understanding sight-reading, and how to improve this ability has been an area of study for over 100 years. One research study shows that aural-spatial skills (ear training) and technical proficiency skills were both essential to sight-reading[@hayward2009relationships].
 
 In more recent times, a review was done on AI-education research related to music education. It concludes that "AI is under-utilized for generation despite its potential for education"[@carnovalini2025personalized]. The music generation part of the literature review goes deeper into music generation related to music exercises for general technical improvement.
 
@@ -108,7 +114,7 @@ I believe Basic Pitch is a good candidate model that I can use to create backing
 
 In "Simple and Controllable Music Generation", Meta AI describes a Language Model called MusicGEN[@copet2024simple]. MusicGEN is capable of taking a text based input, and generating a full song. This model can also be prompted with an existing melody and a text prompt, and output a song based on the original melody.
 
-This series of models is promising for offering customized backing tracks for generated sight reading exercises. The exercises could be tailored to include the correct genre of backing track.
+This series of models is promising for offering customized backing tracks for generated sight-reading exercises. The exercises could be tailored to include the correct genre of backing track.
 
 While the music generated is really high quality, the models are also large and require a lot of compute. The smallest model in the MusicGEN model series contains 300 million parameters, and requires ~16gb of GPU RAM to run.
 
@@ -130,9 +136,12 @@ This model requires at least 8GB of GPU RAM to run the smallest model. One goal 
 
 <!-- TODO: Write about the lack of sight reading tools with these genrative tools -->
 
-# Design
+While there are
 
-<!-- A design: this is a revised version of the document that you submitted for your third peer review (max 2000 words). -->
+# Design - X words
+
+<!-- TODO: Add design word count -->
+<!-- this is a revised version of the relevant chapter from your draft report, again incorporating appropriate feedback and any changes you may have made to your design based on feedback given on previous submissions. (max 2000 words) -->
 
 _As stated in the intro, the template I am choosing is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal._
 
@@ -186,6 +195,8 @@ This mockup shows the Exercise History screen. This screen has all of the exerci
 
 <!-- TODO: Why did we make the choices we did? How will these choices best fufil the needs of the users? -->
 
+## User Feedback
+
 ### Good experience with or without an account
 
 My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page if a user is logged in or if they're anonymous.
@@ -194,91 +205,102 @@ My main goal is to reduce friction in users trying out Sight Reader Pro. All of 
 
 The settings to generate sight-reading exercises will allow users to generate exercises that are specific to them. For example, I only would want to see bass clef exercises that have a jazzy theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
 
-## Project Structure
+# Implementation - X words
 
-### Frontend
+<!-- TODO: add word count -->
+<!-- this should describe the implementation of the project. This should follow the style of the topic 6 peer review (but greatly expanded to cover the entire implementation), describing the major algorithms/techniques used, explanation of the most important parts of the code and a visual representation of the results (e.g. screenshots or graphs). (max 2500 words) -->
 
-The frontend will be a web application, and it will use the React[@react] library. Vexflow[@vexflowa] will be used for the music notation. TensorflowJS[@tensorflowjs] is going to be utilized to have CREPE[@crepe] served directly on the frontend for real-time pitch estimation. The frontend will utilize the backend API for the majority of the logic for the entire application. Jest[@jest] will be used for all frontend related testing.
+## Overview
 
-### Backend
+## Docker
 
-The backend API will be written in Python, and will use the FastAPI[@fastapi] library for all of the API calls. The backendAPI will make calls to the model-specific Docker[@docker] containers where the models are hosted/deployed.
+The whole project is wrapped in docker[@dockera]. The frontend, the main API, all of the models, and MLFlow[@mlflow] are all in their own containers.
 
-Each model will be hosted in its own container, and will have a single FastAPI[@fastapi] endpoint for running inference on the model. The exact models that will be used for generating sight-reading exercises are still being researched.
+![Docker Architecture](images/docker-architecture.png){width=300px}
 
-PostgreSQL[@group2026postgresql] will be used as the database for the application, and will be in it's own container. PostgreSQL will be used for storing the data related to each exercise, including the settings used to generate it.
+There are two defined networks: `frontend-network` and `model-network`. `frontend-network` has the frontend container and the Main API container. The goal of this network was to isolate what could talk to the Main API, and the Frontend. I didn't want any of the model containers being able to communicate to the frontend, and I didn't want the frontend or any external requests to be able to communicate with the model containers, or the MLFlow container.
 
-Testing of the backend logic will be done using PyTest[@pytest]
+Using docker allowed me to better control the dependencies for each model. For example, the `text-to-music model` uses python 3.12, whereas `basic-pitch model` uses python 3.10. These projects would not be able to run in the same container, as they both require different versions of Numpy[@numpy].
 
-### Docker
+## Frontend
 
-Docker[@docker], and Docker Compose will be utilized to containerize the entire project. This way all of the dependencies for each part of the project will be isolated from one another. This is especially important for all of the models, which have different python versions and conflicting dependencies.
+The frontend was written using React[@reactb] and uses Vite[@vite] for the docker/production build. I was already familiar with React, as I use it at my day job, and thought it would be the easiest way for me to make the frontend quickly.. The main styling and core components were built using React Bootstrap[@reacta].
 
-## Project Plan
+## Main Backend API
 
-![Project Gantt Chart](images/gantt.png)
+## Model APIs
 
-## Evaluation (x words)
+All of the model containers follow the same basic flow, using a version of python that meets the main package requirements, FastAPI for calling the model, and MLFlow for logging each experiment.
 
-<!-- TODO: add evaluation word length -->
+### Basic-Pitch API
+
+### Text-To-Music API
+
+### CREPE API
 
 ### User feedback
 
 <!-- TODO: Talk about -->
 
-# Feature Prototype
+# Evaluation - X words
 
-<!-- A feature prototype: this is the only new element of the submission, details below (max 1500 words). -->
+<!-- TODO: add evaluation word length -->
+<!-- Describe the evaluation carried out (e.g. user studies or testing on data) and give the results. You should also justify your choices in your approach to obtaining and analysing the results. Your evaluation should give a critique of the project as a whole, highlighting successes, failures, limitations and possible extensions. (max 2500 words) -->
 
-## Proving out a note recognition model
+## Model Evaluation
 
-I believe the hardest part of this project will be recognizing notes from any instrument, and then plotting them against the original exercise and checking for accuracy. For a basic prototype, I wanted to build a pipeline that takes in audio, and then creates a music engraving/sheet music based on what was played.
+One of the core parts of choosing this project template was model evaluation. My main goals for choosing models were the following:
 
-### Iterating quickly with Gradio
+- Does this model have fast inference?
 
-To test out models quickly, I wanted to keep my "frontend" as close as possible to Python, where I would be testing various models. I've used Gradio[@abid2019gradio] at work in the past, and found its easy syntax for spinning up Python based web demos to be perfect. Gradio already has simple components like getting audio
+### MusicGen
 
-### Utilizing the CREPE model
+- Kinda sucked. Took Forever.
 
-Installing the CREPE[@kim2018crepe] model to test out was simple, as it has a python library available on PIP[@crepeb]. The library allows the developer to choose between the different model sizes (tiny, small, medium etc), and allows for different "step sizes", or how often the given audio track will be sampled and have its frequency analyzed.
+### NotaGen
 
-## Demo in action
+- Also kind of sucked.
 
-![Demo audio input and CREPE model output](images/demo1.png){width=300px}
+### Text2Midi
 
-This demo allowed both a live audio recording, and the ability to upload a .wav or .mp3. I found the ability to upload an audio file nice for testing purposes, but I don't believe most users would end up using an upload feature.
+- This model took forever.
+- The model took ~2 hours to generate anything worth while.
 
-The demo has the ability to playback the audio that was uploaded/recorded. This was super helpful when looking at the rendered sheet music that was based on the recording.
+### Text To Music
 
-The CREPE[@kim2018crepe] model output contains a frequency in hertz, and a confidence interval. The model has a "step" parameter for how often it samples the audio file, and in this demo it's set at 10 milliseconds.
+- Loved the results of this model
+- Example code found on Huggingface hub/repo worked
 
-![Demo input and model output](images/demo2.png){width=300px}
+## Failed Approaches
 
-To try and get a better understanding of the data that was coming out of the model, I plotted the predicted frequency and confidence markers on a graph. The red dots over the line graph indicate the model was at least 70% confident in that prediction.
+### Porting TextToMusic to ONNX Runtime
 
-As can be seen in the demo, there are a few outliers that have confidence marker, which means I probably need to increase the confidence threshold in the real application.
+Earlier on in this project, I was playing around with the idea of using Transformers.js[@2026huggingface] to grab all of the models for this project, and have inference done using ONNX Runtime[@onnx]. This would allow me to run model inference on the client side, which would be so cool! The Transformers.js documentation made it seem like it would be easy enough, so I gave it a shot. The main python notebook (located at `project/model-exploration/text_to_music_onnx_conversion.ipynb` in the project repo[@thoraldson2026tthoraldson]) use to convert Text-To-Music to an onnx format seemed like it was going well, just running into typical input/output shape issues. I made it as far as uploading it to HuggingFace[@textToOnnx] before I realized running inference on this model required a custom python library, _Samplings_[@2022samplings]. For a few hours I tried to re-implement both the _TopPSampling_ and _TemperatureSampling_ methods before I decided to just use what the original author of the model had used, and go back to doing a full python implementaiton.
 
-![Demo input and model output](images/demo3.png){width=300px}
+## Successes
 
-The output was a simple bass clef with whatever notes I decided to play on my bass at that time. During some of my experiments it would plot a note I never played, usually stemming from sounds made while I was starting or stopping the recording. I believe that adjusting the confidence interval like I mentioned in the paragraph above will fix this.
+### Basic-Pitch works great!
 
-## Evaluating the Feature
+### CREPE + Basic-Pitch make a mean combo
 
-### What goes well
+## Limitations
 
-The CREPE[@kim2018crepe] model works really well. After playing around with the different model sizes and landing on the "small" one, I'm happy with how fast it was able to return results. It took longer to render the frequency plot than it did to process the audio file!
+## Extensions
 
-The python environment in general was very easy to prototype in, and make lots of changes quickly. I believe this is solid evidence for me sticking with python in the backend for all of the models and the backend API.
+# Conclusion - X words
 
-### What needs improvement
+<!-- TODO: add Conclusion word length -->
+<!-- This can be a short summary of the project as a whole but, it can also bring out any broader themes you would like to discuss, or suggest further work. (max 1000 words) -->
 
-While lilypond works in the demo, it took forever to get set up and the rendered music engraving was average. It rendered an entire PDF, which had to be saved as a PNG, and then passed to Gradio[@abid2019gradio] for it to be rendered. In the future, I would like the python side to create only what's needed for the frontend to render the music engraving, saving the output in abc notation[@abc], or something similar.
+## In Conclusion...
 
-As mentioned in above paragraphs, the confidence interval for the CREPE model needs to be adjusted so random background noise is not included in the eventual music engraving.
+## If I were to do it again
 
-Now that the basic music notes that were played are being plotted, I want to add more information about the rhythm that was played. Using the TempoCNN[@schreiber2018singlestep] model, or something similar, I can get tempo related features from the same audio stream and use them to enhance my music engravings.
+If I were to start this project over, I believe my approach would change considerably. I think I probably would've stuck with using something like gradio[@abid2019gradio] or streamlit[@2021streamlit] to quickly make the frontend would've cut down my workload for getting a testable user interface, and allow me to put more time into prompt tuning the models I chose, and maybe even fine tuning models that would work better to generate sight-reading passages.
 
-While Gradio[@abid2019gradio] was nice for a quick prototype, the framework is not flexible enough to deliver the final product. As outlined in the architecture area, the frontend will be switched to use the React[@react] framework. The music engraving will be moving to the frontend, and will be rendered using VexFlow[@vexflowa]. Having the frontend using javascript will also enable me to prototype more models that use Tensorflowjs[@tensorflowjs], where the models are hosted on the client's web browser.
+There were a lot of really cool audio processing libraries that I wanted to try, such as Librosa[@mcfee2015librosaa], but didn't get around to because of my approach. I believe that there are lots of signal processing implementations for audio analysis that I could've utilized if I wasn't so focused on using machine learning models for every aspect of this project.
+
+## Further Work
 
 \newpage
 
@@ -288,6 +310,6 @@ While Gradio[@abid2019gradio] was nice for a quick prototype, the framework is n
 - [Pandoc](https://pandoc.org/) was used to generate this report from a markdown file
 - [Zotero](https://www.zotero.org/) was used to manage sources, and generate a BibTex file for references/citations
 - [draw.io](https://www.drawio.com/) was used for all of the Sight Reader Pro mockups
-- [Online Gantt](https://www.onlinegantt.com/#/gantt) for creating the gantt chart image
+- [https://plantuml.com/](https://plantuml.com/) was used for creating my architecture diagrams
 
 # References
