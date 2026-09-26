@@ -63,7 +63,7 @@ function Music() {
         <Button
           onClick={async () => {
             const result = await generateMusic(
-              "This is a short piece of jazz bass. It's in 4/4. It's 4 bars long.",
+              "This is a simple song. Like kids music.",
             );
 
             setAbc(result);

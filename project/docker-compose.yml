@@ -23,8 +23,6 @@ services:
       - model-network
     ports:
       - "8080:8080"
-    environment:
-      - "GIT_PYTHON_REFRESH=quiet"
     env_file:
       - .env
 
@@ -35,8 +33,8 @@ services:
       - model-network
     ports:
       - "8090:8090"
-    environment:
-      - "GIT_PYTHON_REFRESH=quiet"
+    env_file:
+      - .env
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:v3.16.1
