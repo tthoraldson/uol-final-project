@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ABCJS from "abcjs";
 import { Button, Container, Row } from "react-bootstrap";
 import generateMusic from "../api/text-to-music.api";
+import { useMusic } from "./musicContext";
 import Recorder from "./record";
 
 // @ts-expect-error - hates importing CSS this way
@@ -12,7 +13,7 @@ function Music() {
   const paperRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLDivElement>(null);
 
-  const [abc, setAbc] = useState("");
+  const { abc, setAbc } = useMusic();
 
   useEffect(() => {
     if (!paperRef.current || !audioRef.current || !abc) {
