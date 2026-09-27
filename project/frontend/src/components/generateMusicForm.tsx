@@ -17,7 +17,6 @@ function MusicGenerationForm({ onSubmit }: MusicGenerationFormProps) {
   const [instrument, setInstrument] = useState("bass");
   const [genre, setGenre] = useState("rock");
   const [prompt, setPrompt] = useState("");
-  const { setAbc } = useMusic();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

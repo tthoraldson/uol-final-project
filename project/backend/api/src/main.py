@@ -37,6 +37,15 @@ async def home():
 
 @app.post("/analyze")
 async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...), baseline_midi: UploadFile = File(...)):
+    audio_data = await audio.read()
+
+    logger.warning(
+        "Basic Pitch received audio: filename=%s content_type=%s bytes=%d",
+        audio.filename,
+        audio.content_type,
+        len(audio_data),
+    )
+    
     result = await analyze_v1(original_abc, audio, baseline_midi)
     return "implementing..."
 

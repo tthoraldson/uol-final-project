@@ -27,7 +27,18 @@ async def home():
 
 @app.post("/midi")
 async def getMidi(audio: UploadFile = File(...)):
-    logger.info("inside getMidi()")
+    
+    logger.warning("filename=%s", audio.filename)
+    logger.warning("content_type=%s", audio.content_type)
+
+    await audio.seek(0)
+    data = await audio.read()
+
+    logger.warning("received bytes: %d", len(data))
+    logger.warning("first 16 bytes: %r", data[:16])
+
+    await audio.seek(0)
+
     mlflow.set_experiment("Basic-Pitch-Midi-Generation")
 
     with mlflow.start_run() as run:
@@ -45,7 +56,8 @@ async def getMidi(audio: UploadFile = File(...)):
 
             while chunk := await audio.read(1024 * 1024):
                 temp_audio.write(chunk)
-        try: 
+
+        try:
             predict_and_save(
                 audio_path_list=[str(audio_path)],
                 model_or_model_path="./nmp.onnx",
@@ -56,19 +68,18 @@ async def getMidi(audio: UploadFile = File(...)):
                 save_model_outputs=False,
             )
 
-            midi_files = list(
-                Path(output_directory).glob("*.mid")
-            )
+            midi_files = list(Path(output_directory).glob("*.mid"))
 
             if not midi_files:
                 raise RuntimeError("Basic Pitch did not generate a MIDI file")
 
             midi_file = midi_files[0]
 
-
         finally:
-            return FileResponse(
-                path=str(midi_file),
-                media_type="audio/midi",
-                filename="generated.mid",
-            )
+            audio_path.unlink(missing_ok=True)
+
+        return FileResponse(
+            path=str(midi_file),
+            media_type="audio/midi",
+            filename="generated.mid",
+        )

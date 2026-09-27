@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Card, Form, Col, Row, Spinner } from "react-bootstrap";
 import analyze from "../api/core.api";
 import ABCJS from "abcjs";
+import { WavRecorder } from "webm-to-wav-converter";
 import { useMusic } from "./musicContext";
 
 interface AudioRecorderProps {
@@ -19,9 +20,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   // media and audio refs
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
+  const recorderRef = useRef<InstanceType<typeof WavRecorder> | null>(null); // typescript chill!!
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // abc refs
@@ -46,7 +45,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
     getDevices().catch(console.error);
 
     return () => {
-      streamRef.current?.getTracks().forEach((track) => track.stop());
+      recorderRef.current?.stop();
     };
   }, []);
 
@@ -55,48 +54,32 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       return;
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        deviceId: {
-          exact: selectedDevice,
-        },
-      },
-    });
+    const recorder = new WavRecorder();
+    recorderRef.current = recorder;
 
-    streamRef.current = stream;
-    chunksRef.current = [];
-
-    const recorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = recorder;
-
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        chunksRef.current.push(event.data);
-      }
-    };
-
-    recorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, {
-        type: "audio/webm",
-      });
-
-      setRecordingBlob(blob);
-
-      const url = URL.createObjectURL(blob);
-
-      setAudioUrl(url);
-      setHasRecording(true);
-      onRecordingComplete?.(blob);
-
-      stream.getTracks().forEach((track) => track.stop());
-    };
-
-    recorder.start();
+    await recorder.start();
     setRecording(true);
   }
 
   function stopRecording() {
-    mediaRecorderRef.current?.stop();
+    const recorder = recorderRef.current;
+
+    if (!recorder) {
+      return;
+    }
+
+    recorder.stop();
+
+    const blob = recorder.getBlob() as unknown as Blob; // lots of making typescript happy here...
+
+    setRecordingBlob(blob);
+
+    const url = URL.createObjectURL(blob);
+    setAudioUrl(url);
+    setHasRecording(true);
+
+    onRecordingComplete?.(blob);
+
     setRecording(false);
   }
 
@@ -108,7 +91,6 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
     setAudioUrl(null);
     setHasRecording(false);
     setRecordingBlob(null);
-    chunksRef.current = [];
   }
 
   function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -118,8 +100,16 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       return;
     }
 
+    console.log("Uploaded file:", {
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    });
+
     setRecordingBlob(file);
-    setAudioUrl(URL.createObjectURL(file));
+
+    const url = URL.createObjectURL(file);
+    setAudioUrl(url);
     setHasRecording(true);
 
     onRecordingComplete?.(file);
@@ -130,6 +120,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       console.warn("we here");
       return;
     }
+
     setIsLoading(true);
 
     try {
@@ -144,15 +135,12 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
         new File([midi], "baseline.mid", {
           type: "audio/midi",
         }),
-        new File([recordingBlob], "recording.webm", {
-          type: "audio/webm",
+        new File([recordingBlob], "recording.wav", {
+          type: "audio/wav",
         }),
       );
 
       console.warn("Analysis response:", response);
-
-      // Temporary delay to test loading state
-      await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
       console.error("Analysis failed:", error);
     } finally {
@@ -222,6 +210,14 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
               </>
             ) : (
               <>
+                {/* This forces only .wav files for now. */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".wav,audio/wav"
+                  onChange={handleFileUpload}
+                  style={{ display: "none" }}
+                />
                 <Button
                   variant="secondary"
                   className="w-100 mb-2"

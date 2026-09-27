@@ -19,7 +19,8 @@ async def analyze_v1(abc_string: str, audio: UploadFile, baseline_midi: UploadFi
     # run crepe
     # pitch_data = run_crepe(audio)
 
-    # get baseline midi
+    # unpack baseline midi
+
 
     return
 
