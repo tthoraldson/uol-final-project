@@ -13,6 +13,32 @@ from routers.crepe import generate_pitch
 
 logger = logging.getLogger(__name__)
 
+# Data format/contract!
+# {
+#     "results": [1, 1, 1, 1, 1, 1, 1, 1],
+
+#     "metrics": {
+#         "precision": 1.0,
+#         "recall": 1.0,
+#         "f_measure": 1.0,
+#         "onset_accuracy": 1.0,
+#         "offset_accuracy": 1.0,
+#         "pitch_accuracy": 1.0,
+#     },
+
+#     "timing": {
+#         "mean_onset_error": 0.0,
+#         "mean_offset_error": 0.0,
+#     },
+
+#     "summary": {
+#         "notes_expected": 8,
+#         "notes_played": 8,
+#         "notes_correct": 8,
+#         "notes_incorrect": 0,
+#         "accuracy": 1.0,
+#     },
+# }
 async def analyze_v1(abc_string: str, audio: UploadFile) -> str:
     user_midi = await generate_midi(audio)
 
@@ -22,6 +48,8 @@ async def analyze_v1(abc_string: str, audio: UploadFile) -> str:
     pitch_data = await generate_pitch(audio)
 
     baseline_midi = abc_to_midi(str)
+
+
 
     correct_notes = matched_notes["correct"]
     incorrect_notes = matched_notes["incorrect"]
@@ -35,7 +63,7 @@ def test_abc_function(abc: str):
     music = muspy.read_abc_string(abc)
 
     logger.warning(music)
-    logger.warning(music.tracks)
+    logger.warning(music.tracks.notes)
 
     return music
 

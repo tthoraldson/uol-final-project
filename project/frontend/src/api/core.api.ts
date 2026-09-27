@@ -18,8 +18,6 @@ async function analyze(abc: string, wav: File | Blob) {
 
   const res = await response.json();
 
-  console.warn("response from analyze", res);
-
   return res;
 }
 

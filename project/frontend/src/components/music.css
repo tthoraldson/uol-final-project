@@ -16,3 +16,8 @@
   fill: green !important;
   stroke: green !important;
 }
+
+.incorrect-note {
+  fill: red !important;
+  stroke: red !important;
+}

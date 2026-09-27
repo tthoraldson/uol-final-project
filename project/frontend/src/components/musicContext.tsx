@@ -4,12 +4,15 @@ import { CurrentExercise } from "../api/local-storage.api";
 type MusicContextType = {
   abc: string;
   setAbc: React.Dispatch<React.SetStateAction<string>>;
+  feedback: number[];
+  setFeedback: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
 export function MusicProvider({ children }: { children: React.ReactNode }) {
   const [abc, setAbc] = useState("");
+  const [feedback, setFeedback] = useState<number[]>([]);
   const currentExercise = new CurrentExercise();
 
   // on music context start
@@ -38,7 +41,7 @@ export function MusicProvider({ children }: { children: React.ReactNode }) {
   }, [abc]);
 
   return (
-    <MusicContext.Provider value={{ abc, setAbc }}>
+    <MusicContext.Provider value={{ abc, setAbc, feedback, setFeedback }}>
       {children}
     </MusicContext.Provider>
   );

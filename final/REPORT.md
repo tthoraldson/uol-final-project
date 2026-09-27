@@ -132,6 +132,10 @@ This model requires at least 8GB of GPU RAM to run the smallest model. One goal 
 
 ### Text2Midi
 
+## Other Models
+
+### QWEN ONNX
+
 ## The Research Gaps
 
 <!-- TODO: Write about the lack of sight reading tools with these genrative tools -->
@@ -224,7 +228,9 @@ Using docker allowed me to better control the dependencies for each model. For e
 
 ## Frontend
 
-The frontend was written using React[@reactb] and uses Vite[@vite] for the docker/production build. I was already familiar with React, as I use it at my day job, and thought it would be the easiest way for me to make the frontend quickly.. The main styling and core components were built using React Bootstrap[@reacta].
+### Libraries Used
+
+The frontend was written using React[@reactb] and uses Vite[@vite] for the docker/production build. I was already familiar with React, as I use it at my day job, and thought it would be the easiest way for me to make the frontend quickly.. The main styling and core components were built using React Bootstrap[@reacta]. I used abcjs[@abcjs] for rendering abc notation, and for
 
 ## Main Backend API
 
@@ -252,6 +258,8 @@ All of the model containers follow the same basic flow, using a version of pytho
 One of the core parts of choosing this project template was model evaluation. My main goals for choosing models were the following:
 
 - Does this model have fast inference?
+- Can the model generate a variety of music styles?
+- Can the model
 
 ### MusicGen
 
@@ -270,6 +278,9 @@ One of the core parts of choosing this project template was model evaluation. My
 
 - Loved the results of this model
 - Example code found on Huggingface hub/repo worked
+
+<!-- IMAGE OF INFERANCE FROM LAST 10 RUNS -->
+<!--  -->
 
 ## Failed Approaches
 

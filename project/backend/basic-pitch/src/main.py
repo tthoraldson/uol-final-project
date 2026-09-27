@@ -20,7 +20,7 @@ mlflow.enable_system_metrics_logging()
 output_directory = "/"
 
 
-app = FastAPI()
+app = FastAPI(title="basic-pitch API")
 
 @app.get("/")
 async def home():

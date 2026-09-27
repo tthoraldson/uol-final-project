@@ -25,7 +25,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // abc refs
-  const { abc } = useMusic();
+  const { abc, setFeedback } = useMusic();
 
   useEffect(() => {
     async function getDevices() {
@@ -134,6 +134,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       const response = await analyze(abc, recordingBlob);
 
       console.warn("Analysis response:", response);
+      setFeedback(response["results"]);
     } catch (error) {
       console.error("Analysis failed:", error);
     } finally {

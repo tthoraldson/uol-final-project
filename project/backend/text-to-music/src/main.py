@@ -24,7 +24,7 @@ tokenizer = AutoTokenizer.from_pretrained('sander-wood/text-to-music')
 model = AutoModelForSeq2SeqLM.from_pretrained('sander-wood/text-to-music')
 model = model
 
-app = FastAPI()
+app = FastAPI(title="text-to-music API")
 
 @app.get("/")
 async def home():

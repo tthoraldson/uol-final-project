@@ -23,7 +23,7 @@ mlflow.enable_system_metrics_logging()
 
 
 
-app = FastAPI()
+app = FastAPI(title="crepe API")
 
 @app.get("/")
 async def home():

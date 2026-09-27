@@ -19,7 +19,7 @@ function Music() {
   const paperRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLDivElement>(null);
 
-  const { abc, setAbc } = useMusic();
+  const { abc, setAbc, feedback, setFeedback } = useMusic();
 
   useEffect(() => {
     if (!paperRef.current || !audioRef.current || !abc) {
@@ -57,7 +57,18 @@ function Music() {
       .catch((error) => {
         console.error("Audio problem:", error);
       });
-  }, [abc]);
+
+    // Display feedback, if any
+    if (feedback && feedback.length > 0) {
+      feedback.forEach((result, index) => {
+        if (result === 1) {
+          makeNoteGreen(index);
+        } else if (result === 0) {
+          makeNoteRed(index);
+        }
+      });
+    }
+  }, [abc, feedback]);
 
   function makeNoteGreen(index: number) {
     if (!paperRef.current) return;
@@ -120,6 +131,17 @@ function Music() {
                 Add Manual ABC
               </Button>
             </div>
+            {feedback && feedback.length > 0 && (
+              <div className="m-1">
+                <Button
+                  variant="danger"
+                  className="w-auto"
+                  onClick={() => setFeedback([])}
+                >
+                  Remove Feedback
+                </Button>
+              </div>
+            )}
             {/* Debug, adjusting note color */}
             {/* <div className="m-1">
               <Button

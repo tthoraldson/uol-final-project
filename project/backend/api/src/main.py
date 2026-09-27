@@ -13,7 +13,7 @@ from components.analyze import analyze_v1, test_abc_function
 
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
+app = FastAPI(title="Backend API")
 
 
 app.include_router(music_to_text.router)
@@ -47,7 +47,7 @@ async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...)):
     )
     
     result = await analyze_v1(original_abc, audio)
-    return "implementing..."
+    return result
 
 
 @app.post("/test")
