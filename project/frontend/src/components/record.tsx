@@ -266,7 +266,25 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
             )}
           </Col>
           {recording && <div className="text-danger">● Recording...</div>}
-          {audioUrl && <audio controls src={audioUrl} className="w-100 m-2" />}
+          {audioUrl && recordingBlob && (
+            <>
+              <Row>
+                <Col>
+                  <audio controls src={audioUrl} className="w-100 m-2" />
+                </Col>
+                {/* Debug, add download option */}
+                {/* <Col>
+                  <a
+                    href={audioUrl}
+                    download="recording.wav"
+                    className="btn btn-primary m-2"
+                  >
+                    Download WAV
+                  </a>
+                </Col> */}
+              </Row>
+            </>
+          )}
         </Row>
       </Card.Body>
     </Card>
