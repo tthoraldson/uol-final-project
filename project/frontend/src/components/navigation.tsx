@@ -1,6 +1,6 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 
 // Base component was found on react-bootstrap's component page: https://react-bootstrap-v2-bs5.netlify.app/docs/components/navbar
 
@@ -13,8 +13,9 @@ function Navigation() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About/List</Nav.Link>
-            <Nav.Link href="#data">data/user</Nav.Link>
+            <Nav.Link href="/about" disabled>
+              Exercise List
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

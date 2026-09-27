@@ -1,6 +1,7 @@
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-import subprocess
+from io import BytesIO
+from music21 import converter
 
 
 def ensure_default_note_length(abc: str) -> str:
@@ -18,3 +19,15 @@ def ensure_default_note_length(abc: str) -> str:
         lines.append("L:1/8")
 
     return "\n".join(lines)
+
+
+def abc_to_midi(abc_string: str) -> bytes:
+    score = converter.parseData(
+        abc_string,
+        format="abc",
+    )
+
+    midi_file = BytesIO()
+    score.write("midi", fp=midi_file)
+
+    return midi_file.getvalue()

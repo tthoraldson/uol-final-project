@@ -9,10 +9,12 @@ import GenerateMusicModal from "./generateMusicModal";
 // @ts-expect-error - hates importing CSS this way
 import "./music.css";
 import React from "react";
+import AddManualMusicModal from "./addManualMusicModal";
 
 // starter code was from this abcjs example: https://examples.abcjs.net/full-synth.html
 function Music() {
   const [modalShow, setModalShow] = React.useState(false);
+  const [manualModalShow, setManualModalShow] = React.useState(false);
 
   const paperRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<HTMLDivElement>(null);
@@ -69,6 +71,18 @@ function Music() {
     }
   }
 
+  function makeNoteRed(index: number) {
+    if (!paperRef.current) return;
+
+    const notes = paperRef.current.querySelectorAll(".abcjs-note");
+
+    const note = notes[index];
+
+    if (note) {
+      note.classList.add("incorrect-note");
+    }
+  }
+
   return (
     <>
       <Card className="m-2" style={{ minWidth: "300px", minHeight: "200px" }}>
@@ -96,11 +110,12 @@ function Music() {
                 Generate Music
               </Button>
             </div>
+
             <div className="m-1">
               <Button
                 variant="secondary"
                 className="w-auto"
-                onClick={() => setModalShow(true)}
+                onClick={() => setManualModalShow(true)}
               >
                 Add Manual ABC
               </Button>
@@ -120,6 +135,10 @@ function Music() {
       <Recorder />
 
       <GenerateMusicModal show={modalShow} onHide={() => setModalShow(false)} />
+      <AddManualMusicModal
+        show={manualModalShow}
+        onHide={() => setManualModalShow(false)}
+      />
     </>
   );
 }

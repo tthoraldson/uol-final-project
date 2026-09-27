@@ -36,7 +36,7 @@ async def home():
     return "Hello, World!"
 
 @app.post("/analyze")
-async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...), baseline_midi: UploadFile = File(...)):
+async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...)):
     audio_data = await audio.read()
 
     logger.warning(
@@ -46,7 +46,7 @@ async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...), 
         len(audio_data),
     )
     
-    result = await analyze_v1(original_abc, audio, baseline_midi)
+    result = await analyze_v1(original_abc, audio)
     return "implementing..."
 
 

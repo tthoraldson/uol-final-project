@@ -6,7 +6,9 @@ from fastapi.responses import FileResponse
 import mlflow
 import os
 from pathlib import Path
+import tempfile
 from tempfile import TemporaryDirectory, NamedTemporaryFile
+import wave
 
 logger = logging.getLogger(__name__)
 
@@ -28,25 +30,27 @@ async def home():
 @app.post("/midi")
 async def getMidi(audio: UploadFile = File(...)):
     await audio.seek(0)
-    data = await audio.read()
+    audio_data = await audio.read()
+
+    logger.warning("filename: %s", audio.filename)
+    logger.warning("content type: %s", audio.content_type)
+    logger.warning("received bytes: %d", len(audio_data))
+    logger.warning("received header: %s", audio_data[:16])
 
     mlflow.set_experiment("Basic-Pitch-Midi-Generation")
 
     with mlflow.start_run() as run:
         mlflow.log_params({
-                "model": "./nmp.onnx",
-                "save_midi": True,
-                "sonify_midi": False,
-                "save_notes": False,
-                "save_model_outputs": False,
-            })
+            "model": "./nmp.onnx",
+            "save_midi": True,
+            "sonify_midi": False,
+            "save_notes": False,
+            "save_model_outputs": False,
+        })
 
-
-        with NamedTemporaryFile(suffix=".wav", delete=False) as temp_audio:
+        with NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio:
             audio_path = Path(temp_audio.name)
-
-            while chunk := await audio.read(1024 * 1024):
-                temp_audio.write(chunk)
+            temp_audio.write(audio_data)
 
         try:
             predict_and_save(
@@ -62,7 +66,9 @@ async def getMidi(audio: UploadFile = File(...)):
             midi_files = list(Path(output_directory).glob("*.mid"))
 
             if not midi_files:
-                raise RuntimeError("Basic Pitch did not generate a MIDI file")
+                raise RuntimeError(
+                    "Basic Pitch did not generate a MIDI file"
+                )
 
             midi_file = midi_files[0]
 

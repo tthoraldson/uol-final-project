@@ -1,0 +1,1 @@
+vmsg.wasam was coppied directly from node modules!

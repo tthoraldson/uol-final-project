@@ -7,22 +7,25 @@ import muspy
 import logging
 
 from routers.basic_pitch import generate_midi
-from components.abc_utils import ensure_default_note_length
-# from routers.crepe import run_crepe
+from components.abc_utils import ensure_default_note_length, abc_to_midi
+from routers.crepe import run_crepe
 
 logger = logging.getLogger(__name__)
 
-async def analyze_v1(abc_string: str, audio: UploadFile, baseline_midi: UploadFile) -> str: # returns the abc string to display
-    # run basic-pitch
-    basic_pitch_midi = await generate_midi(audio)
+async def analyze_v1(abc_string: str, audio: UploadFile) -> str:
+    user_midi = await generate_midi(audio)
 
-    # run crepe
-    # pitch_data = run_crepe(audio)
+    await audio.seek(0)
+    audio_bytes = await audio.read()
 
-    # unpack baseline midi
+    pitch_data = run_crepe(audio_bytes)
 
+    baseline_midi = abc_to_midi(str)
 
-    return
+    correct_notes = matched_notes["correct"]
+    incorrect_notes = matched_notes["incorrect"]
+
+    return abc_string
 
 def test_abc_function(abc: str):
     abc = abc.replace("\\n", "\n")
@@ -51,10 +54,10 @@ def midi_to_arrays(midi_data: bytes):
 
     return notes, intervals, pitches
 
-def midi_match_notes(baseline_midi: bytes, recognized_midi: bytes):
+def midi_match_notes(baseline_midi: bytes, user_midi: bytes):
     # use mir_eval to compare the baseline to the basic_pitch recognized midi notes
     baseline_notes, baseline_intervals, baseline_pitches = midi_to_arrays(baseline_midi)
-    recognized_notes, recognized_intervals, recognized_pitches = midi_to_arrays(recognized_midi)
+    recognized_notes, recognized_intervals, recognized_pitches = midi_to_arrays(user_midi)
 
     matching = mir_eval.transcription.match_notes(
         baseline_intervals,
@@ -82,4 +85,5 @@ def midi_match_notes(baseline_midi: bytes, recognized_midi: bytes):
         "overlap": overlap,
         "matching": matching,
         "correct": i in matched_baseline_indexes,
+        "incorrect": i not in matched_baseline_indexes,
     }

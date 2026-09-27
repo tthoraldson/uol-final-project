@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Card, Form, Col, Row, Spinner } from "react-bootstrap";
 import analyze from "../api/core.api";
 import ABCJS from "abcjs";
-import { WavRecorder } from "webm-to-wav-converter";
+import { Recorder as VmsgRecorder } from "vmsg";
 import { useMusic } from "./musicContext";
 
 interface AudioRecorderProps {
@@ -20,7 +20,8 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   // media and audio refs
-  const recorderRef = useRef<InstanceType<typeof WavRecorder> | null>(null); // typescript chill!!
+  const recorderRef = useRef<VmsgRecorder | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // abc refs
@@ -28,78 +29,69 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
 
   useEffect(() => {
     async function getDevices() {
-      await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
-
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const inputs = devices.filter((device) => device.kind === "audioinput");
-
-      setDevices(inputs);
-
-      if (inputs.length > 0) {
-        setSelectedDevice(inputs[0].deviceId);
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const inputs = devices.filter((device) => device.kind === "audioinput");
+        setDevices(inputs);
+        if (inputs.length > 0) {
+          setSelectedDevice(inputs[0].deviceId);
+        }
+      } catch (error) {
+        console.error("Microphone device permissions missing:", error);
       }
     }
-
-    getDevices().catch(console.error);
+    getDevices();
 
     return () => {
-      recorderRef.current?.stop();
+      streamRef.current?.getTracks().forEach((track) => track.stop());
     };
   }, []);
 
   async function startRecording() {
-    if (!selectedDevice) {
-      return;
-    }
+    if (!selectedDevice) return;
 
-    const recorder = new WavRecorder();
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: { deviceId: { exact: selectedDevice } },
+    });
+
+    streamRef.current = stream;
+
+    const recorder = new VmsgRecorder({
+      wasmURL: "/vsg/vmsg.wasm",
+    });
+
     recorderRef.current = recorder;
 
-    await recorder.start();
+    await recorder.init();
+    recorder.startRecording();
     setRecording(true);
   }
 
   async function stopRecording() {
     const recorder = recorderRef.current;
+    if (!recorder) return;
 
-    if (!recorder) {
-      console.error("No recorder");
-      return;
-    }
+    const audioBlob = await recorder.stopRecording();
 
-    recorder.stop();
+    console.log("Recorded blob:", {
+      size: audioBlob.size,
+      type: audioBlob.type,
+    });
 
-    let blob: Blob | undefined;
+    const url = URL.createObjectURL(audioBlob);
 
-    // WavRecorder 1.1.0 has a race condition:
-    // stop() triggers MediaRecorder.ondataavailable asynchronously.
-    for (let i = 0; i < 20; i++) {
-      const result = await (recorder.getBlob() as unknown as Promise<
-        Blob | undefined
-      >);
-
-      if (result instanceof Blob) {
-        blob = result;
-        break;
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
-
-    if (!blob) {
-      console.error("WAV blob was never produced");
-      return;
-    }
-
-    // Create a URL for the audio player
-    const url = URL.createObjectURL(blob);
-
-    setRecordingBlob(blob);
+    setRecordingBlob(audioBlob);
     setAudioUrl(url);
     setHasRecording(true);
     setRecording(false);
+
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+    }
+
+    recorderRef.current = null;
   }
 
   function clearRecording() {
@@ -120,16 +112,11 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       return;
     }
 
-    console.log("Uploaded file:", {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    });
-
     setRecordingBlob(file);
 
     const url = URL.createObjectURL(file);
     setAudioUrl(url);
+
     setHasRecording(true);
 
     onRecordingComplete?.(file);
@@ -142,23 +129,9 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
     }
 
     setIsLoading(true);
-
     try {
-      // Generate baseline MIDI from the ABC
-      const midi = ABCJS.synth.getMidiFile(abc, {
-        midiOutputType: "binary",
-      });
-
       // Analyze the recording
-      const response = await analyze(
-        abc,
-        new File([midi], "baseline.mid", {
-          type: "audio/midi",
-        }),
-        new File([recordingBlob], "recording.wav", {
-          type: "audio/wav",
-        }),
-      );
+      const response = await analyze(abc, recordingBlob);
 
       console.warn("Analysis response:", response);
     } catch (error) {
@@ -230,37 +203,28 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
               </>
             ) : (
               <>
-                {/* This forces only .wav files for now. */}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".wav,audio/wav"
-                  onChange={handleFileUpload}
-                  style={{ display: "none" }}
-                />
                 <Button
-                  variant="secondary"
+                  variant="primary"
                   className="w-100 mb-2"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={startRecording}
                 >
-                  Upload Recording
+                  Start Recording
                 </Button>
 
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="audio/*"
-                  hidden
                   onChange={handleFileUpload}
+                  style={{ display: "none" }}
                 />
 
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   className="w-100 mb-2"
-                  onClick={startRecording}
-                  disabled={!selectedDevice}
+                  onClick={() => fileInputRef.current?.click()}
                 >
-                  Start Recording
+                  Upload Recording
                 </Button>
               </>
             )}
@@ -273,15 +237,15 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
                   <audio controls src={audioUrl} className="w-100 m-2" />
                 </Col>
                 {/* Debug, add download option */}
-                {/* <Col>
+                <Col>
                   <a
                     href={audioUrl}
-                    download="recording.wav"
+                    download="recording.mp3"
                     className="btn btn-primary m-2"
                   >
                     Download WAV
                   </a>
-                </Col> */}
+                </Col>
               </Row>
             </>
           )}

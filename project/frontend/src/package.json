@@ -27,6 +27,7 @@
     "react-h5-audio-player": "^3.10.2",
     "react-router": "^8.4.0",
     "vexflow": "^5.0.0",
+    "vmsg": "^0.4.0",
     "webm-to-wav-converter": "^1.1.0"
   },
   "devDependencies": {

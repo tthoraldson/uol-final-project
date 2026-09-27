@@ -83,4 +83,6 @@ function GenerateMusicModal(props: ModalProps) {
   );
 }
 
+function createprompt() {}
+
 export default GenerateMusicModal;

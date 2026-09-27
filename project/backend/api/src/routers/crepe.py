@@ -39,17 +39,20 @@ async def run_crepe_with_image(audio: UploadFile = File(...)):
     )
 
 
-@router.get("/pitch-tracker-image")
+@router.post("/pitch-tracker")
 async def run_crepe(audio: UploadFile = File(...)):
-    # TODO:
-    # [ ] Add step size param
-    # [ ] Add Viterbi param
     async with httpx.AsyncClient(timeout=500.0) as client:
-        response = await client.get(
-            CREPE_API + "/pitch-tracker-image",
-            params={
-                "prompt": prompt
-            }
+        audio_data = await audio.read()
+
+        response = await client.post(
+            CREPE_API + "/pitch-tracker",
+            files={
+                "audio": (
+                    audio.filename,
+                    audio_data,
+                    audio.content_type,
+                )
+            },
         )
 
     response.raise_for_status()

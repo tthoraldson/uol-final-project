@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from io import BytesIO
 import matplotlib.pyplot as plt
 import pretty_midi
 import librosa
@@ -27,8 +28,7 @@ async def midi_image(midi_file: UploadFile = File(...)):
 
 @router.post("/basic-pitch-midi-image")
 async def midi_image(wav: UploadFile = File(...)):
-    midi_file = generate_midi(wav)
-    midi_data = await midi_file.read()
+    midi_data = await generate_midi(wav)
 
     image_data = create_midi_image(midi_data)
 
