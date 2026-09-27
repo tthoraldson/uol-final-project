@@ -237,7 +237,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
                   <audio controls src={audioUrl} className="w-100 m-2" />
                 </Col>
                 {/* Debug, add download option */}
-                <Col>
+                {/* <Col>
                   <a
                     href={audioUrl}
                     download="recording.mp3"
@@ -245,7 +245,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
                   >
                     Download WAV
                   </a>
-                </Col>
+                </Col> */}
               </Row>
             </>
           )}

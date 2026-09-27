@@ -11,3 +11,4 @@ uvicorn
 mlflow
 psutil
 python-multipart
+av

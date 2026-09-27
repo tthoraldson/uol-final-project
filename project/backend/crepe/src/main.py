@@ -11,6 +11,9 @@ import tempfile
 from io import BytesIO
 import time as special_time
 
+import numpy as np
+from io import BytesIO
+
 logger = logging.getLogger(__name__)
 
 # setup MLFlow
@@ -35,55 +38,70 @@ async def pitchTracker(audio: UploadFile = File(...)):
     # [ ] Add params to mlflow logs
 
     mlflow.set_experiment("CREPE-frequency-prediction")
+
     with mlflow.start_run() as run:
-        with tempfile.NamedTemporaryFile(
-            suffix=".wav",
-            delete=False
-        ) as temp:
-            temp.write(await audio.read())
-            audio_path = Path(temp.name)
+        audio_bytes = await audio.read()
 
-        try:
-            mlflow.log_params({
-                "step_size": 10,
-                "model_capacity": "full",
-                "viterbi": True,
-                "verbose": 1,
-            })
+        container = av.open(BytesIO(audio_bytes))
+        stream = container.streams.audio[0]
 
-            sr, audio_data = wavfile.read(audio_path)
+        frames = []
 
-            start_time = special_time.perf_counter()
+        for frame in container.decode(stream):
+            frames.append(frame.to_ndarray())
 
-            time, frequency, confidence, activation = crepe.predict(
-                audio_data,
-                sr,
-                step_size=10,
-                model_capacity="full",
-                viterbi=True,
-                verbose=1,
-            )
+        audio_data = np.concatenate(frames, axis=1)
 
-            end_time = special_time.perf_counter()
-            latency = end_time - start_time
-            mlflow.log_metric("latency_seconds", latency)
+        # Convert to mono
+        if audio_data.shape[0] > 1:
+            audio_data = np.mean(audio_data, axis=0)
+        else:
+            audio_data = audio_data[0]
 
-            predictions = [
-                {
-                    "time": float(t),
-                    "frequency": float(freq),
-                    "confidence": float(conf),
-                }
-                for t, freq, conf in zip(time, frequency, confidence)
-            ]
+        sr = stream.rate
 
-            return {
-                "sample_rate": sr,
-                "predictions": predictions,
+        mlflow.log_params({
+            "step_size": 10,
+            "model_capacity": "full",
+            "viterbi": True,
+            "verbose": 1,
+        })
+
+        start_time = special_time.perf_counter()
+
+        time, frequency, confidence, activation = crepe.predict(
+            audio_data,
+            sr,
+            step_size=10,
+            model_capacity="full",
+            viterbi=True,
+            verbose=1,
+        )
+
+        end_time = special_time.perf_counter()
+
+        mlflow.log_metric(
+            "latency_seconds",
+            end_time - start_time,
+        )
+
+        predictions = [
+            {
+                "time": float(t),
+                "frequency": float(freq),
+                "confidence": float(conf),
             }
+            for t, freq, conf in zip(
+                time,
+                frequency,
+                confidence,
+            )
+        ]
 
-        finally:
-            audio_path.unlink(missing_ok=True)
+        return {
+            "sample_rate": sr,
+            "predictions": predictions,
+        }
 
 
 @app.post("/pitch-tracker-image")

@@ -5,10 +5,11 @@ import numpy as np
 import pretty_midi
 import muspy
 import logging
+from io import BytesIO
 
 from routers.basic_pitch import generate_midi
 from components.abc_utils import ensure_default_note_length, abc_to_midi
-from routers.crepe import run_crepe
+from routers.crepe import generate_pitch
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ async def analyze_v1(abc_string: str, audio: UploadFile) -> str:
     await audio.seek(0)
     audio_bytes = await audio.read()
 
-    pitch_data = run_crepe(audio_bytes)
+    pitch_data = await generate_pitch(audio)
 
     baseline_midi = abc_to_midi(str)
 

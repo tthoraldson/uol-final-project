@@ -4,13 +4,13 @@ import type { ModalProps } from "react-bootstrap";
 import MusicGenerationForm from "./generateMusicForm";
 import generateMusic from "../api/text-to-music.api";
 import { useMusic } from "./musicContext";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ABCJS from "abcjs";
 
 function GenerateMusicModal(props: ModalProps) {
   const { setAbc } = useMusic();
-  const [formOrMusic, setFormMusicState] = React.useState(false); // fakse = form, true = music
-  const [currentlyGenerating, setCurrentlyGenerating] = React.useState(false);
+  const [formOrMusic, setFormMusicState] = useState(false); // fakse = form, true = music
+  const [currentlyGenerating, setCurrentlyGenerating] = useState(false);
   const [resAbc, setResAbc] = useState("");
   const paperRef = useRef<HTMLDivElement>(null);
 

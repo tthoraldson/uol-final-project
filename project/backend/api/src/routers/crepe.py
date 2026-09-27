@@ -61,3 +61,24 @@ async def run_crepe(audio: UploadFile = File(...)):
         content=response.json(),
         status_code=response.status_code,
     )
+
+
+async def generate_pitch(audio: UploadFile):
+    await audio.seek(0)
+    audio_data = await audio.read()
+
+    async with httpx.AsyncClient(timeout=500.0) as client:
+        response = await client.post(
+            CREPE_API + "/pitch-tracker",
+            files={
+                "audio": (
+                    audio.filename,
+                    audio_data,
+                    audio.content_type,
+                )
+            },
+        )
+
+    response.raise_for_status()
+
+    return response.json()
