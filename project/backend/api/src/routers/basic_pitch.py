@@ -2,16 +2,16 @@ import logging
 import os
 import httpx
 import json
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile, File, Response
 
 
 logger = logging.getLogger(__name__)
 
-BASIC_PITCH_API = os.getenv("BASIC_PITCH_API") or "http://basic-pitch:8080"
+BASIC_PITCH_API = os.getenv("BASIC_PITCH_API") or "http://basic-pitch:8090"
 
 router = APIRouter(
-    prefix="/music-to-text",
-    tags=["music-to-text"])
+    prefix="/basic-pitch",
+    tags=["basic-pitch"])
 
 @router.get("/")
 def root():
@@ -19,17 +19,31 @@ def root():
     return "Hello from the music-to-text router"
 
 
-@router.get("/generate")
-async def generate(prompt: str = "a simple jazz bass solo"):
+@router.post("/midi")
+async def getMidi(audio: UploadFile = File(...)):
+    midi_data = await generate_midi(audio)
+
+    return Response(
+        content=midi_data,
+        media_type="audio/midi",
+    )
+
+
+async def generate_midi(audio: UploadFile) -> bytes:
+    audio_data = await audio.read()
+
     async with httpx.AsyncClient(timeout=120.0) as client:
-        response = await client.get(
-            TEXT_TO_MUSIC_API + "/generate",
-            params={
-                "prompt": prompt
-            }
+        response = await client.post(
+            BASIC_PITCH_API + "/midi",
+            files={
+                "audio": (
+                    audio.filename,
+                    audio_data,
+                    audio.content_type,
+                )
+            },
         )
 
     response.raise_for_status()
-    logger.warn('response', response)
 
-    return response.json()
+    return response.content

@@ -2,5 +2,7 @@ fastapi
 uvicorn
 httpx
 mir_eval
-music21
 librosa
+pretty_midi
+matplotlib
+python-multipart

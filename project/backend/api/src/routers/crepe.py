@@ -24,8 +24,29 @@ async def generate(audio: UploadFile = File(...)):
     # [ ] Add step size param
     # [ ] Add Viterbi param
     async with httpx.AsyncClient(timeout=500.0) as client:
-        response = await client.get(
+        response = await client.post(
             CREPE_API + "/pitch-tracker",
+            params={
+                "prompt": prompt
+            }
+        )
+
+    response.raise_for_status()
+
+    return JSONResponse(
+        content=response.json(),
+        status_code=response.status_code,
+    )
+
+
+@router.get("/pitch-tracker-image")
+async def generate(audio: UploadFile = File(...)):
+    # TODO:
+    # [ ] Add step size param
+    # [ ] Add Viterbi param
+    async with httpx.AsyncClient(timeout=500.0) as client:
+        response = await client.get(
+            CREPE_API + "/pitch-tracker-image",
             params={
                 "prompt": prompt
             }

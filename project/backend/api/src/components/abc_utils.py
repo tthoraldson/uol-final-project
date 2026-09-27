@@ -1,5 +1,3 @@
-import music21
-from music21 import converter
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 import subprocess
