@@ -6,3 +6,6 @@ librosa
 pretty_midi
 matplotlib
 python-multipart
+muspy==0.5.0
+music21==9.1.0
+pyabc2

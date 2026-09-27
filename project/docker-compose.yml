@@ -1,11 +1,12 @@
 services:
-  frontend:
-    build:
-      context: ./frontend/
-    networks:
-      - frontend-network
-    ports:
-      - "3005:3005"
+  # BUG: Doesn't serve up home correctly. Use npm start in frontend dir for now.
+  # frontend:
+  #   build:
+  #     context: ./frontend/
+  #   networks:
+  #     - frontend-network
+  #   ports:
+  #     - "3005:3005"
 
   api:
     build:

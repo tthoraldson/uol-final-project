@@ -4,7 +4,6 @@ import httpx
 import json
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from components.abc_utils import change_clef_via_cli, format_abc
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +33,7 @@ async def generate(prompt: str = "a simple jazz bass solo"):
     
     data = response.json()
 
-    valid_abc = format_abc(data["tune"])
-    valid_abc = change_clef_via_cli(valid_abc, 'bass')
-    
-    data["tune"] = valid_abc
+    # TODO: validate abc string
 
     return JSONResponse(
         content=response.json(),

@@ -19,7 +19,7 @@ def root():
 
 
 @router.get("/pitch-tracker")
-async def generate(audio: UploadFile = File(...)):
+async def run_crepe_with_image(audio: UploadFile = File(...)):
     # TODO:
     # [ ] Add step size param
     # [ ] Add Viterbi param
@@ -40,7 +40,7 @@ async def generate(audio: UploadFile = File(...)):
 
 
 @router.get("/pitch-tracker-image")
-async def generate(audio: UploadFile = File(...)):
+async def run_crepe(audio: UploadFile = File(...)):
     # TODO:
     # [ ] Add step size param
     # [ ] Add Viterbi param

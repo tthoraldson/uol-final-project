@@ -9,6 +9,7 @@ from scipy.io import wavfile
 import numpy as np
 import tempfile
 from io import BytesIO
+import time as special_time
 
 logger = logging.getLogger(__name__)
 
@@ -31,41 +32,58 @@ async def pitchTracker(audio: UploadFile = File(...)):
     # TODO:
     # [ ] Add step size param
     # [ ] Add Viterbi param
-    with tempfile.NamedTemporaryFile(
-        suffix=".wav",
-        delete=False
-    ) as temp:
-        temp.write(await audio.read())
-        audio_path = Path(temp.name)
+    # [ ] Add params to mlflow logs
 
-    try:
-        sr, audio_data = wavfile.read(audio_path)
+    mlflow.set_experiment("CREPE-frequency-prediction")
+    with mlflow.start_run() as run:
+        with tempfile.NamedTemporaryFile(
+            suffix=".wav",
+            delete=False
+        ) as temp:
+            temp.write(await audio.read())
+            audio_path = Path(temp.name)
 
-        time, frequency, confidence, activation = crepe.predict(
-            audio_data,
-            sr,
-            step_size=10,
-            model_capacity="full",
-            viterbi=True,
-            verbose=1,
-        )
+        try:
+            mlflow.log_params({
+                "step_size": 10,
+                "model_capacity": "full",
+                "viterbi": True,
+                "verbose": 1,
+            })
 
-        predictions = [
-            {
-                "time": float(t),
-                "frequency": float(freq),
-                "confidence": float(conf),
+            sr, audio_data = wavfile.read(audio_path)
+
+            start_time = special_time.perf_counter()
+
+            time, frequency, confidence, activation = crepe.predict(
+                audio_data,
+                sr,
+                step_size=10,
+                model_capacity="full",
+                viterbi=True,
+                verbose=1,
+            )
+
+            end_time = special_time.perf_counter()
+            latency = end_time - start_time
+            mlflow.log_metric("latency_seconds", latency)
+
+            predictions = [
+                {
+                    "time": float(t),
+                    "frequency": float(freq),
+                    "confidence": float(conf),
+                }
+                for t, freq, conf in zip(time, frequency, confidence)
+            ]
+
+            return {
+                "sample_rate": sr,
+                "predictions": predictions,
             }
-            for t, freq, conf in zip(time, frequency, confidence)
-        ]
 
-        return {
-            "sample_rate": sr,
-            "predictions": predictions,
-        }
-
-    finally:
-        audio_path.unlink(missing_ok=True)
+        finally:
+            audio_path.unlink(missing_ok=True)
 
 
 @app.post("/pitch-tracker-image")
@@ -107,7 +125,7 @@ async def pitchTrackerImage(plot_voicing: bool = False, audio: UploadFile = File
             image = np.pad(image, [(0, 20), (0, 0), (0, 0)], mode='constant')
             image[-20:-10, :, :] = inferno(confidence)[np.newaxis, :, :]
             image[-10:, :, :] = (
-                inferno((confidence > 0.5).astype(np.float))[np.newaxis, :, :])
+                inferno((confidence > 0.5).astype(float))[np.newaxis, :, :]) # changed np.float to float
 
         image_buffer = BytesIO()
 
