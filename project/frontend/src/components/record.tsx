@@ -61,25 +61,44 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
     setRecording(true);
   }
 
-  function stopRecording() {
+  async function stopRecording() {
     const recorder = recorderRef.current;
 
     if (!recorder) {
+      console.error("No recorder");
       return;
     }
 
     recorder.stop();
 
-    const blob = recorder.getBlob() as unknown as Blob; // lots of making typescript happy here...
+    let blob: Blob | undefined;
+
+    // WavRecorder 1.1.0 has a race condition:
+    // stop() triggers MediaRecorder.ondataavailable asynchronously.
+    for (let i = 0; i < 20; i++) {
+      const result = await (recorder.getBlob() as unknown as Promise<
+        Blob | undefined
+      >);
+
+      if (result instanceof Blob) {
+        blob = result;
+        break;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+
+    if (!blob) {
+      console.error("WAV blob was never produced");
+      return;
+    }
+
+    // Create a URL for the audio player
+    const url = URL.createObjectURL(blob);
 
     setRecordingBlob(blob);
-
-    const url = URL.createObjectURL(blob);
     setAudioUrl(url);
     setHasRecording(true);
-
-    onRecordingComplete?.(blob);
-
     setRecording(false);
   }
 
@@ -88,9 +107,10 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
       URL.revokeObjectURL(audioUrl);
     }
 
+    setRecordingBlob(null);
     setAudioUrl(null);
     setHasRecording(false);
-    setRecordingBlob(null);
+    setRecording(false);
   }
 
   function handleFileUpload(event: React.ChangeEvent<HTMLInputElement>) {

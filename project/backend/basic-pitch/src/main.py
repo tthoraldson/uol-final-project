@@ -27,17 +27,8 @@ async def home():
 
 @app.post("/midi")
 async def getMidi(audio: UploadFile = File(...)):
-    
-    logger.warning("filename=%s", audio.filename)
-    logger.warning("content_type=%s", audio.content_type)
-
     await audio.seek(0)
     data = await audio.read()
-
-    logger.warning("received bytes: %d", len(data))
-    logger.warning("first 16 bytes: %r", data[:16])
-
-    await audio.seek(0)
 
     mlflow.set_experiment("Basic-Pitch-Midi-Generation")
 

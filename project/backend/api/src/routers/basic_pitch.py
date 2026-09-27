@@ -30,13 +30,6 @@ async def getMidi(audio: UploadFile = File(...)):
 
 
 async def generate_midi(audio: UploadFile) -> bytes:
-    await audio.seek(0)
-
-    audio_data = await audio.read()
-
-    logger.warning("generate_midi bytes: %d", len(audio_data))
-    logger.warning("generate_midi header: %r", audio_data[:16])
-
     async with httpx.AsyncClient(timeout=120.0) as client:
         response = await client.post(
             BASIC_PITCH_API + "/midi",
