@@ -38,34 +38,41 @@ function GenerateMusicModal(props: ModalProps) {
         {!formOrMusic ? (
           <MusicGenerationForm
             onSubmit={async (values) => {
+              setCurrentlyGenerating(true);
               console.log(values);
               const result = await generateMusic(
                 "This is a simple song. Like kids music.",
               );
               setResAbc(result);
               setFormMusicState(true);
+              setCurrentlyGenerating(false);
             }}
+            isLoading={currentlyGenerating}
           />
         ) : (
           <>
             <div ref={paperRef} />
-            <Button
-              onClick={() => {
-                setAbc(resAbc);
-                setResAbc("");
-                setFormMusicState(false);
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              onClick={() => {
-                setResAbc("");
-                setFormMusicState(false);
-              }}
-            >
-              Generate New
-            </Button>
+            <div>
+              <Button
+                onClick={() => {
+                  setAbc(resAbc);
+                  setResAbc("");
+                  setFormMusicState(false);
+                }}
+                className="me-2"
+              >
+                Save
+              </Button>
+              <Button
+                onClick={() => {
+                  setResAbc("");
+                  setFormMusicState(false);
+                }}
+                className="me-2"
+              >
+                Generate New
+              </Button>
+            </div>
           </>
         )}
       </Modal.Body>

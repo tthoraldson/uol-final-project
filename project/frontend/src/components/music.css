@@ -7,3 +7,12 @@
 #paper svg {
   display: inline-block;
 }
+
+.music-form-loading {
+  opacity: 0.5;
+}
+
+.correct-note {
+  fill: green !important;
+  stroke: green !important;
+}

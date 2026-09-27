@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import generateMusic from "../api/text-to-music.api";
 import { useMusic } from "./musicContext";
 
@@ -10,9 +10,13 @@ type MusicGenerationFormProps = {
     genre: string;
     prompt: string;
   }) => void;
+  isLoading: boolean;
 };
 
-function MusicGenerationForm({ onSubmit }: MusicGenerationFormProps) {
+function MusicGenerationForm({
+  onSubmit,
+  isLoading,
+}: MusicGenerationFormProps) {
   const [difficulty, setDifficulty] = useState("beginner");
   const [instrument, setInstrument] = useState("bass");
   const [genre, setGenre] = useState("rock");
@@ -31,57 +35,75 @@ function MusicGenerationForm({ onSubmit }: MusicGenerationFormProps) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3">
-        <Form.Label>Difficulty</Form.Label>
-        <Form.Select
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </Form.Select>
-      </Form.Group>
+      <fieldset disabled={isLoading}>
+        <Form.Group className="mb-3">
+          <Form.Label>Difficulty</Form.Label>
+          <Form.Select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </Form.Select>
+        </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label>Instrument</Form.Label>
-        <Form.Select
-          value={instrument}
-          onChange={(e) => setInstrument(e.target.value)}
-        >
-          <option value="bass">Bass</option>
-          <option value="piano">Piano</option>
-          <option value="guitar">Guitar</option>
-          <option value="violin">Violin</option>
-          <option value="trumpet">Trumpet</option>
-          <option value="flute">Flute</option>
-        </Form.Select>
-      </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Instrument</Form.Label>
+          <Form.Select
+            value={instrument}
+            onChange={(e) => setInstrument(e.target.value)}
+          >
+            <option value="bass">Bass</option>
+            <option value="piano">Piano</option>
+            <option value="guitar">Guitar</option>
+            <option value="violin">Violin</option>
+            <option value="trumpet">Trumpet</option>
+            <option value="flute">Flute</option>
+          </Form.Select>
+        </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label>Genre</Form.Label>
-        <Form.Select value={genre} onChange={(e) => setGenre(e.target.value)}>
-          <option value="jazz">Jazz</option>
-          <option value="classical">Classical</option>
-          <option value="blues">Blues</option>
-          <option value="rock">Rock</option>
-          <option value="folk">Folk</option>
-          <option value="funk">Funk</option>
-        </Form.Select>
-      </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Genre</Form.Label>
+          <Form.Select value={genre} onChange={(e) => setGenre(e.target.value)}>
+            <option value="jazz">Jazz</option>
+            <option value="classical">Classical</option>
+            <option value="blues">Blues</option>
+            <option value="rock">Rock</option>
+            <option value="folk">Folk</option>
+            <option value="funk">Funk</option>
+          </Form.Select>
+        </Form.Group>
 
-      <Form.Group className="mb-3">
-        <Form.Label>Additional Instructions</Form.Label>
-        <Form.Control
-          as="textarea"
-          rows={4}
-          placeholder="What else would you like to see in this exercise?"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-      </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Additional Instructions</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={4}
+            placeholder="What else would you like to see in this exercise?"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
+        </Form.Group>
+      </fieldset>
 
-      <Button type="submit">Generate Music</Button>
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? (
+          <>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="me-2"
+            />
+            Generating...
+          </>
+        ) : (
+          "Generate Music"
+        )}
+      </Button>
     </Form>
   );
 }
