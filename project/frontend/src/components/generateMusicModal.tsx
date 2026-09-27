@@ -40,6 +40,7 @@ function GenerateMusicModal(props: ModalProps) {
             onSubmit={async (values) => {
               setCurrentlyGenerating(true);
               console.log(values);
+              //   todo: update prompt
               const result = await generateMusic(
                 "This is a simple song. Like kids music.",
               );

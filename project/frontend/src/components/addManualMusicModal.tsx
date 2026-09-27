@@ -55,6 +55,7 @@ function AddManualMusicModal(props: ModalProps) {
                   setAbc(resAbc);
                   setResAbc("");
                   setFormMusicState(false);
+                  props.onHide;
                 }}
                 className="me-2"
               >

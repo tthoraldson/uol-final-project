@@ -88,7 +88,7 @@ function Music() {
       <Card className="m-2" style={{ minWidth: "300px", minHeight: "200px" }}>
         <Card.Body>
           <Row className="mb-2">
-            <Card.Title>Cool Music area (Title in Progress)</Card.Title>
+            <Card.Title>Sight Reading Exercise</Card.Title>
             <div ref={paperRef} />
           </Row>
           <Row>
@@ -120,7 +120,8 @@ function Music() {
                 Add Manual ABC
               </Button>
             </div>
-            <div className="m-1">
+            {/* Debug, adjusting note color */}
+            {/* <div className="m-1">
               <Button
                 variant="danger"
                 className="w-auto"
@@ -128,7 +129,7 @@ function Music() {
               >
                 Make Note green
               </Button>
-            </div>
+            </div> */}
           </div>
         </Card.Body>
       </Card>
