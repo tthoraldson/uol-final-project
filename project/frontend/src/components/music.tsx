@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ABCJS from "abcjs";
-import { Button, Container, Row } from "react-bootstrap";
+import { Button, Card, Container, Row } from "react-bootstrap";
 import generateMusic from "../api/text-to-music.api";
 import { useMusic } from "./musicContext";
 import Recorder from "./record";
@@ -56,15 +56,17 @@ function Music() {
 
   return (
     <>
-      <Container></Container>
-      <Row>
-        <div ref={paperRef} />
-      </Row>
-      <Row>
-        <div id="audio" ref={audioRef} />
-      </Row>
-      <Row>
-        {/* <Button
+      <Card className="m-2" style={{ minWidth: "300px", minHeight: "200px" }}>
+        <Card.Body>
+          <Row className="mb-2">
+            <Card.Title>Cool Music area (Title in Progress)</Card.Title>
+            <div ref={paperRef} />
+          </Row>
+          <Row>
+            <div id="audio" ref={audioRef} />
+          </Row>
+          <Row>
+            {/* <Button
           onClick={async () => {
             const result = await generateMusic(
               "This is a simple song. Like kids music.",
@@ -75,12 +77,16 @@ function Music() {
         >
           Generate Music
         </Button> */}
-        <Button variant="primary" onClick={() => setModalShow(true)}>
-          Generate Music
-        </Button>
-      </Row>
+            <Button variant="primary" onClick={() => setModalShow(true)}>
+              Generate Music
+            </Button>
+          </Row>
 
+          <Row></Row>
+        </Card.Body>
+      </Card>
       <Recorder />
+
       <GenerateMusicModal show={modalShow} onHide={() => setModalShow(false)} />
     </>
   );

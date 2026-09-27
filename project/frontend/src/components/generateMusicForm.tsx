@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import generateMusic from "../api/text-to-music.api";
+import { useMusic } from "./musicContext";
 
 type MusicGenerationFormProps = {
   onSubmit: (values: {
@@ -15,8 +17,9 @@ function MusicGenerationForm({ onSubmit }: MusicGenerationFormProps) {
   const [instrument, setInstrument] = useState("bass");
   const [genre, setGenre] = useState("rock");
   const [prompt, setPrompt] = useState("");
+  const { setAbc } = useMusic();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     onSubmit({

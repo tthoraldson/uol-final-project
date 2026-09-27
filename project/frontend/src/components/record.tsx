@@ -106,7 +106,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
   return (
     <Card className="m-2">
       <Card.Body>
-        <Row class="mb-2">
+        <Row className="mb-2">
           <Col xs={9}>
             <Card.Title>Recorder</Card.Title>
 

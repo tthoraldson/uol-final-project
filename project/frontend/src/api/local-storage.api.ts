@@ -71,10 +71,10 @@ export class LocalStorageList {
 }
 
 export class CurrentExercise {
-  private key = "currentExerciseId";
+  private key = "currentExerciseAbc";
 
-  set(exerciseId: string): void {
-    localStorage.setItem(this.key, exerciseId);
+  set(abc: string): void {
+    localStorage.setItem(this.key, abc);
   }
 
   get(): string | null {
