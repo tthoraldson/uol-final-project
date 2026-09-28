@@ -1,6 +1,6 @@
 ---
 title: "Sight Reading Pro"
-subtitle: "Final Project Report - X/10500 words"
+subtitle: "Final Project Report - 6298/10500 words"
 author: "Theresa Thoraldson"
 date: 2026-09-28
 bibliography: references.bib
@@ -322,7 +322,6 @@ The settings to generate sight-reading exercises will allow users to generate ex
 
 # Implementation (1653/2500 words)
 
-<!-- TODO: add word count -->
 <!-- this should describe the implementation of the project. This should follow the style of the topic 6 peer review (but greatly expanded to cover the entire implementation), describing the major algorithms/techniques used, explanation of the most important parts of the code and a visual representation of the results (e.g. screenshots or graphs). (max 2500 words) -->
 
 ## Docker
@@ -473,6 +472,8 @@ Contains `analyze_v1`, which curently uses `mir_eval` to match notes in the _bas
 
 Results from crepe are passed in to `mir_eval` for finding the estimated tempo, and to compare against the _baseline MIDI_.
 
+The results are then parsed, and a feedback object and some metrics are returned to the frontend for the user to see.
+
 `analyze_v1` works just okay. It doesn't do well with complex rhythm, or fast, muddy recordings. I plan on implementing an `analyze_v2` with another attempt.
 
 ## Model APIs
@@ -558,7 +559,7 @@ The following picture shows the major API calls that happen between the containe
 
 ![Core Functionality API Calls](images/coreRequests.png){width=500px}
 
-# Evaluation (X/2500 words)
+# Evaluation (721/2500 words)
 
 <!-- Describe the evaluation carried out (e.g. user studies or testing on data) and give the results. You should also justify your choices in your approach to obtaining and analysing the results. Your evaluation should give a critique of the project as a whole, highlighting successes, failures, limitations and possible extensions. (max 2500 words) -->
 
@@ -568,11 +569,7 @@ One of the core parts of choosing this project template was model evaluation. My
 
 - Does this model have fast inference?
 - Can the model generate a variety of music styles?
-- Can the model
-
-### Chat Musician
-
-- Also kind of sucked.
+- Output ABC consistently
 
 ### Text2Midi
 
@@ -582,15 +579,35 @@ This is the only text-to-midi model that I tried. It took almost 2 hours to run 
 
 The inference time and the amount of compute made me say no to this model.
 
-### Text To Music
+### Text-To-Music
 
-- Loved the results of this model
-- Example code found on Huggingface hub/repo worked
+text-to music consistently generates readable `abc` notation. The only time it doesn't is when I make the `max_iter` parameter too low. I really like the variety of music this model makes. I feel like I'm playing roulette with this model, never quite knowing what I'll get. This leads to a variety of strange things, such as generating exercises with lots of rests, or exercises that are extremely difficult.
 
-<!-- IMAGE OF INFERANCE FROM LAST 10 RUNS -->
-<!--  -->
+![text-to-music Generates lots of rests](images/textRest.png){width=500px}
 
-## Selected Models
+#### System Metrics
+
+During inference, the memory use and CPU use spike dramatically. I believe it would be worth exploring what's taking up so many resources, and if the inference loop I'm currently using can be optimized.
+
+![text-to-music System CPU Utilization](images/system_cpu_utilization_percentage.png){width=500px}
+
+![text-to-music System Memory Utilization](images/system_System_memory_usage_megabytes.png){width=500px}
+
+#### MLFlow data
+
+All of the `text-to-data` inference runs were logged to MLFlow. Not all of them succeeded. There were a lot of times where inference took a lot longer for one prompt than it did for another. The `text-to-music: max_length vs Duration` plot visualizes this. It might be worth looking into why sometimes inference takes so much longer.
+
+![text-to-music: max_length vs Duration plot](images/textPlotMaxInput.png){width=400px}
+
+I also thought that the size of `max_input` was introducing failures at lower lower numbers of iterations. While it's true that there were some errors,
+
+![text-to-music: max_length, iterations & errors](images/maxInputError.png){width=400px}
+
+### basic-pitch
+
+Basic pitch turned out to be a fast and efficient way to generate midi files. I need to spend more time with the hyper parameters to play with note grouping, and the minimum and maximum frequency. For example, a bass would never go above 300hz, so it should ignore any noises in that range. Same with trying to figure out what the tempo of the upload is before running basic-pitch, so that the groupings are more informed during analysis.
+
+![basic-pitch: Twinkle Twinkle Little Star midi visualization](images/twinkle-twinkle-basic-pitch.png){width=500px}
 
 ## Failed Approaches
 
@@ -598,37 +615,75 @@ The inference time and the amount of compute made me say no to this model.
 
 Earlier on in this project, I was playing around with the idea of using Transformers.js[@2026huggingface] to grab all of the models for this project, and have inference done using ONNX Runtime[@onnx]. This would allow me to run model inference on the client side, which would be so cool! The Transformers.js documentation made it seem like it would be easy enough, so I gave it a shot. The main python notebook (located at `project/model-exploration/text_to_music_onnx_conversion.ipynb` in the project repo[@thoraldson2026tthoraldson]) use to convert Text-To-Music to an onnx format seemed like it was going well, just running into typical input/output shape issues. I made it as far as uploading it to HuggingFace[@textToOnnx] before I realized running inference on this model required a custom python library, _Samplings_[@2022samplings]. For a few hours I tried to re-implement both the _TopPSampling_ and _TemperatureSampling_ methods before I decided to just use what the original author of the model had used, and go back to doing a full python implementaiton.
 
-## Successes
-
-### Basic-Pitch works great!
-
-### CREPE + Basic-Pitch make a mean combo
-
-![CREPE Activation Plot for c-major.wav](images/crepe.png){width=500px}
-
 ## Limitations
 
-## Extensions
+### Generated Music
 
-# Conclusion (X/1000 words)
+Even when genre, difficulty and instrument are provided in the prompt, `text-to-music` seems to ignore it and generate whatever it wants. There are also issues with random rests being generated. I believe the prompt and hyper-parameters need to be re-evaluated to improve the results.
 
-<!-- TODO: add Conclusion word length -->
+### Evaulation set
+
+I kept using the same two or three `.wav` files that I recorded myself for evaluating the functions. I believe that there are many bugs because of this.
+
+In the future, having well defined evals ahead of time will make it easier to test my application, and I'll get a better idea as to how a variety of different styles of music, and inputs perform in the system.
+
+# Conclusion (375/1000 words)
+
 <!-- This can be a short summary of the project as a whole but, it can also bring out any broader themes you would like to discuss, or suggest further work. (max 1000 words) -->
 
-## In Conclusion...
+## If I were to do it again...
 
-## If I were to do it again
+### Using Music Analysis Libraries First
 
 If I were to start this project over, I believe my approach would change considerably. I think I probably would've stuck with using something like gradio[@abid2019gradio] or streamlit[@2021streamlit] to quickly make the frontend would've cut down my workload for getting a testable user interface, and allow me to put more time into prompt tuning the models I chose, and maybe even fine tuning models that would work better to generate sight-reading passages.
 
-There were a lot of really cool audio processing libraries that I wanted to try, such as Librosa[@mcfee2015librosaa], but didn't get around to because of my approach. I believe that there are lots of signal processing implementations for audio analysis that I could've utilized if I wasn't so focused on using machine learning models for every aspect of this project.
+I also think that finding smaller, more well established baselines for these tasks would be helpful. I chose the models for the application before I stumbled upon `librosa`, `mir_eval` and `muspy`. I believe if I were to implement a processing pipeline with just these libraries, I could get 90% of the functionality with 10% of the headache I endured completing this project.
+
+### Move away from FastAPI
+
+I think my use of FASTAPI in this project was overkill. It was nice to have all of the models in their own containers, but I think
 
 ## Further Work
+
+### Rethink the analyze function
+
+I know that there are better ways to use the _CREPE_ and _basic-pitch_
+
+### Clean Up Front End
+
+#### Component Clean Up
+
+The components folder needs love. Move all of the components into their own folders, and have the styles, and similar components live together. Having a wall of components staring at me each time I look at the file tree really sucks.
+
+#### Better State Management
+
+Take a look at this code that's currently in `components/recorder.tsx`:
+
+```typescript
+const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+const [selectedDevice, setSelectedDevice] = useState<string>("");
+const [recording, setRecording] = useState(false);
+const [recordingBlob, setRecordingBlob] = useState<Blob | null>(null);
+const [audioUrl, setAudioUrl] = useState<string | null>(null);
+const [hasRecording, setHasRecording] = useState(false);
+const [isLoading, setIsLoading] = useState(false);
+```
+
+What are we doing here. Choose a better state manager. Don't do this. This has become really hard to work with, and is the source of some gnarly bugs, such as `.mp3` files being invalid.
+
+I think that moving over to Redux[@redux], or another state management solution would do worlds for the frontend.
+
+### Explore prompt optimization using `DS.py`
+
+Right now all of my prompting to the `text-to-music` model are created manually. I'm doing my best to follow the prompt style of the examples, but the results really seem to go all over the place.
+
+Using something like DS.py[@dspy] to program more efficent prompts seems like an interesting approach to get more out of `text-to-music` without having to finetune it.
 
 \newpage
 
 # Acknowledgements
 
+- I did my best highlighting each section of this PDF for my word counts in the headers. My apologies if the counts are over or under inflated.
 - I'm grateful to my sister Anna, and my partner J for proof reading through this report too many times to count, and supporting me during stressful times.
 - [Pandoc](https://pandoc.org/) was used to generate this report from a markdown file
 - [Zotero](https://www.zotero.org/) was used to manage sources, and generate a BibTex file for references/citations
