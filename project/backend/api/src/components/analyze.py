@@ -116,3 +116,23 @@ def midi_match_notes(baseline_midi: bytes, user_midi: bytes):
         "correct": i in matched_baseline_indexes,
         "incorrect": i not in matched_baseline_indexes,
     }
+
+
+music = muspy.read_abc(io.StringIO(abc_string))
+
+ref_intervals = []
+ref_pitches = []
+
+# MusPy keeps notes inside track objects
+for track in music.tracks:
+    for note in track.notes:
+        # Convert symbolic MusPy tick times to absolute seconds
+        onset_seconds = music.get_time_seconds(note.time)
+        offset_seconds = music.get_time_seconds(note.time + note.duration)
+        
+        ref_intervals.append([onset_seconds, offset_seconds])
+        ref_pitches.append(note.pitch)
+
+# Convert to NumPy arrays for mir_eval compatibility
+ref_intervals = np.array(ref_intervals)
+ref_pitches = np.array(ref_pitches)

@@ -320,7 +320,7 @@ The settings to generate sight-reading exercises will allow users to generate ex
 
 \newpage
 
-# Implementation (1032/2500 words)
+# Implementation (1653/2500 words)
 
 <!-- TODO: add word count -->
 <!-- this should describe the implementation of the project. This should follow the style of the topic 6 peer review (but greatly expanded to cover the entire implementation), describing the major algorithms/techniques used, explanation of the most important parts of the code and a visual representation of the results (e.g. screenshots or graphs). (max 2500 words) -->
@@ -469,6 +469,12 @@ The `ensure_default_note_length` method adds a normally missing property back in
 
 #### analyze.py
 
+Contains `analyze_v1`, which curently uses `mir_eval` to match notes in the _baseline MIDI_ and the _basic-pitch generated midi_.
+
+Results from crepe are passed in to `mir_eval` for finding the estimated tempo, and to compare against the _baseline MIDI_.
+
+`analyze_v1` works just okay. It doesn't do well with complex rhythm, or fast, muddy recordings. I plan on implementing an `analyze_v2` with another attempt.
+
 ## Model APIs
 
 All of the model containers follow the same basic flow, using a version of python that meets the main package requirements, FastAPI for calling the model, and MLFlow for logging each experiment.
@@ -497,9 +503,49 @@ Before any conversion begins, an _MLFlow_ experiment is started, and logs all of
 
 ### Text-To-Music API
 
+#### The base container
+
+This container needed quite a few special packages to make the _text-to-music_ model work:
+
+- `libffi-dev`
+- `package-config`
+- `libssl-dev`
+
+It also installs rust[@rust], which is needed for torch[@pytorch] to work.
+
+#### The API
+
+Only one endpoint aside from a hello world, which is `/generate`. It takes in the prompt that was generated on the frontend (based on what the user put in the generate exercise form), and runs inference on the `text-to-music` model.
+
+MLFlow experiment tracking is enabled for each inference run, so I can keep track my my different hyperparameters I've used on this model.
+
+#### `text-to-music` Inference
+
+Based on the _text-to-music_ model card[@2022sanderwood], the `samplings` library is used to sample `top_p_sampling` and `temperature_sampling`. I attempted to use a normal HuggingFace transformers[@wolf2020transformers] generate method, but no valid ABC notation came out of it.
+
+For now, this weird inference setup stays. I want to try and make it more efficient.
+
 ### CREPE API
 
+#### The base container
+
+_CREPE_ demanded a very specific version of setup tools in order to compile. I added a `pip install setuptools<81` command inside of the docker container before the normal `requirements.txt` were installed.
+
+_CREPE_ uses Tensorflow[@tensorflow] to load the model and run inference.
+
+#### The API
+
+There is one main method, `/pitch-tracker` that calls CREPE with the default parameters that were in the example starter code, because the defaults work great! It then returns the predictions that CREPE generates.
+
+There's also `/pitch-tracker-image`, which produces an activation plot based on the predictions. The code that generates the image is from the crepe repository, because it was not included in the CREPE `pip` package. This is only used for testing purposes, and is not callable from the frontend.
+
 ### MLFlow
+
+MLFlow[@mlflow] is an experiment tracker for machine learning models. It can track hyperparameters, and metrics about the container it's running in.
+
+I use the results from MLFlow container in the _Evaluation_ part of this report.
+
+![MLFlow screenshot of experiments](images/mlflow.png){width=400px}
 
 ## At a high level
 
@@ -557,6 +603,8 @@ Earlier on in this project, I was playing around with the idea of using Transfor
 ### Basic-Pitch works great!
 
 ### CREPE + Basic-Pitch make a mean combo
+
+![CREPE Activation Plot for c-major.wav](images/crepe.png){width=500px}
 
 ## Limitations
 
