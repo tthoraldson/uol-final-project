@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "homepage": "https://tthoraldson.github.io/uol-final-project",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "start": "vite",
     "build": "vite build",
@@ -24,13 +24,11 @@
     "react": "^19.2.7",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.7",
-    "react-h5-audio-player": "^3.10.2",
     "react-router": "^8.4.0",
-    "vexflow": "^5.0.0",
-    "vmsg": "^0.4.0",
-    "webm-to-wav-converter": "^1.1.0"
+    "vmsg": "^0.4.0"
   },
   "devDependencies": {
+    "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/browser-playwright": "^5.0.2",
     "eslint": "^10.11.0",

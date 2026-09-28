@@ -53,27 +53,3 @@ async def analyze(original_abc: str = Form(...), audio: UploadFile = File(...)):
 @app.post("/test")
 async def test(abc: str):
     return test_abc_function(abc)
-
-@app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    request: Request,
-    exc: RequestValidationError,
-):
-    logger.warning(f"Method: {request.method}")
-    logger.warning(f"URL:    {request.url}")
-
-    logger.warning("\nErrors:")
-    for error in exc.errors():
-        logger.warning(f"  Location: {error['loc']}")
-        logger.warning(f"  Message:  {error['msg']}")
-        logger.warning(f"  Type:     {error['type']}")
-        logger.warning()
-
-    logger.warning("\n")
-
-    return JSONResponse(
-        status_code=422,
-        content={
-            "detail": exc.errors(),
-        },
-    )

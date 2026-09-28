@@ -172,7 +172,7 @@ My main worry with this model, similar to MusicGen[@copet2024simple], is that it
 
 Qwen3[@yang2025qwen3] is an open source LLM, and is a popular alternative to both Chat GPT and Claude. It can
 
-On HuggingFace, there's an ONNX Runtime[@onnxa] implementation of Qwen3[@onnxcommunity], having 0.6 billion parameters. ONNX Runtime can run models both on mobile devices and directly in the browser. Having a cross-platform compatible model for any conversation or retrival tasks could be nice! And using something like TensorflowJS[@tensorflowjs] or TransformersJS[@2026huggingface] to run Qwen 3 directly in the browser is appealing.
+On HuggingFace, there's an ONNX Runtime[@onnx] implementation of Qwen3[@onnxcommunity], having 0.6 billion parameters. ONNX Runtime can run models both on mobile devices and directly in the browser. Having a cross-platform compatible model for any conversation or retrival tasks could be nice! And using something like TensorflowJS[@tensorflowjs] or TransformersJS[@2026huggingface] to run Qwen 3 directly in the browser is appealing.
 
 I believe this would be more of a stretch feature than anything I would include in this iteration of Sight Reader Pro.
 
@@ -212,22 +212,19 @@ While there are many _text-to-music_ machine learning models that satisfy genera
 
 \newpage
 
-# Design - (X/2000 words)
+# Design - (926/2000 words)
 
-<!-- TODO: Add design word count -->
 <!-- this is a revised version of the relevant chapter from your draft report, again incorporating appropriate feedback and any changes you may have made to your design based on feedback given on previous submissions. (max 2000 words) -->
 
 _As stated in the intro, the template I am choosing is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal._
 
 ## Domain and Project Users
 
-<!-- This section has been proof read. -->
-
 The goal of this project was to create a sight-reading web application that utilizes various machine learning models to create unique sight-reading exercises. The _target user_ for this project is an independent musician that's looking to improve their sight-reading abilities, and is interested in a customized experience based on their instrument of choice, skill level and music genre of choice. The _domain_ of this project could be considered to be music education, but I'm aiming for it to be specifically independent music education.
 
 This project is not ideal for users just learning an instrument, as this application requires at least an elementary understanding of reading sheet music, and playing their instrument of choice.
 
-In my initial feedback survey on the mockups, there was almost an even split of people who were musicians, and people who were not. I believe this is the best kind of feedback, as I can iterate on my feeatures to work for everyone who may want to try sight-readng, not just the experts.
+In my initial feedback survey on the mockups, there was almost an even split of people who were musicians, and people who were not. I believe this is the best kind of feedback, as I can iterate on my feeatures to work for everyone who may want to try sight-reading, not just the experts.
 
 ![Initial Design Survey: Musician Question](images/questionare1.png){width=400px}
 
@@ -265,15 +262,29 @@ The majority of the users surveyed agreed that the options of this page were eas
 
 The final design ended up adding a few new things. There is a midi playback, that's part of the ABCJS[@abcjs] package, and creates a playback of what the exercise sounds like. Considering how easy this feature was to add (It was two lines in the frontend), I thought it would be worth adding in.
 
-The second new feature on this view is the ability to add ABC notation manually. This feature became important for full-stack testing towards the end of creating this project. The music that was being generated was too difficult for me to play, and I wanted to be able to test the same exercise repetedly after the state of the application had changed.
+The second new feature on this view is the ability to add ABC notation manually. This feature became important for full-stack testing towards the end of creating this project. The music that was being generated was too difficult for me to play, and I wanted to be able to test the same exercise repeatedly after the state of the application had changed.
 
-![Sight Reading Pro: Add Manual ABC](images/manualAbc.png){width=500px}
+![Sight Reading Pro: Add Manual ABC, final](images/manualAbc.png){width=500px}
+
+The third feature was one that I talked about in my preliminary report: the ability to upload audio directly to the frontend. This feature has been extremely nice for testing, but I think users might find it helpful too. For example, recording audio on your phone, and then uploading it to Sight Reader Pro when you get home.
 
 ### After Recording Exercise Attempt
 
-![Sight Reading Pro Mockup: Exercise Practice After Attempt](images/exercise-after.png){width=500px}
+![Sight Reading Pro Mockup: Exercise Feedback After Attempt](images/exercise-after.png){width=500px}
 
 This screen is extremely similar to the before exercise attempt screen, but with feedback added from the previous attempt. More feedback will be included based on settings selected, including tempo, rhythm accuracy, etc.
+
+#### User Feedback
+
+The main feedback I got back from users is that the initial mockup was slightly confusing. They didn't know what the red "X" under the note signified. Users suggested turning the whole note red, and updating the button heirarchy was clear.
+
+![Initial Design Survey: Exercise Feedback](images/questionare4.png){width=500px}
+
+#### Final Design
+
+The final design took the user feedback to heart, and implemented both colored note nighlighting for the notes the user missed, and updated buttons that are color coordinated.
+
+![Sight Reading Pro: Exercise Attempt Feedback, Final](images/feedbackFinal.png){width=500px}
 
 ### Generate New Exercises
 
@@ -281,32 +292,38 @@ This screen is extremely similar to the before exercise attempt screen, but with
 
 In the mockup I have two settings to choose from, a difficulty slider and a genre selector. I envisioned many more settings, but only ended up adding support to select from a list of common instruments.
 
-![Sight Reading Pro Mockup: New Exercise](images/generate.png){width=500px}
+#### User Feedback
+
+The majority of the users agreed that the initial design gave them all the information they need to select an exercise. There was no freeform feedback.
+
+![Initial Design Survey: Exercise Feedback](images/questionare5.png){width=500px}
+
+#### Final Design
+
+Since the users liked the inital form, I didn't change it much. I moved the difficult slider to a dropdown, as prompting with a difficulty number is challenging, and added the option to select an instrument.
+
+![Sight Reading Pro Mockup: New Exercise](images/generateFinal.png){width=400px}
 
 ## Design Choices
 
 ### Keep it simple
 
-Using lots of
+Considering the complexity that's required to generate sight-reading music, and then analyze it, I wanted to keep the frontend web application as simple as possible. There is some customizability, but the core features simple and intuitive.
 
-### Good experience without
+### Good experience without needing a login
 
-My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page if a user is logged in or if they're anonymous.
+My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page, which requires no login. Any person that stumbles across the app can use it right away.
 
 ### Customizable Exercise Settings
 
-The settings to generate sight-reading exercises will allow users to generate exercises that are specific to them. For example, I only would want to see bass clef exercises that have a jazzy theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
+The settings to generate sight-reading exercises will allow users to generate exercises that are specific to them. For example, I only would want to see bass exercises that have a jazz theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
 
 \newpage
 
-# Implementation (X/2500 words)
+# Implementation (1032/2500 words)
 
 <!-- TODO: add word count -->
 <!-- this should describe the implementation of the project. This should follow the style of the topic 6 peer review (but greatly expanded to cover the entire implementation), describing the major algorithms/techniques used, explanation of the most important parts of the code and a visual representation of the results (e.g. screenshots or graphs). (max 2500 words) -->
-
-## Overview
-
-![Core Functionality API Calls](images/coreRequests.png){width=500px}
 
 ## Docker
 
@@ -316,33 +333,187 @@ The whole project is wrapped in docker[@dockera]. The frontend, the main API, al
 
 There are two defined networks: `frontend-network` and `model-network`. `frontend-network` has the frontend container and the Main API container. The goal of this network was to isolate what could talk to the Main API, and the Frontend. I didn't want any of the model containers being able to communicate to the frontend, and I didn't want the frontend or any external requests to be able to communicate with the model containers, or the MLFlow container.
 
-Using docker allowed me to better control the dependencies for each model. For example, the `text-to-music model` uses python 3.12, whereas `basic-pitch model` uses python 3.10. These projects would not be able to run in the same container, as they both require different versions of Numpy[@numpy].
+Using docker allowed me to better control the dependencies for each model. For example, the `text-to-music model` uses python 3.12, whereas `basic-pitch model` uses python 3.10. These projects would not be able to run in the same container, as they both require different versions of Numpy[@numpy]. It also allowed me to experiment with different libraries for analysis, such as music21 and librosa. Being able to destroy a container that didn't work out and spin a new one up was amazing.
+
+## Docker Compose
+
+![Docker Desktop Capture](images/dockerCompose.png){width=400px}
+
+In the main `/project` directory in my github repository[@thoraldson2026tthoraldson], there's my docker-compose. This file controls almost everything about the backend projects, and how they interact with each other.
+
+This is how `basic-pitch` is configured in the `docker-compose.yml` file:
+
+```yml
+basic-pitch:
+  build:
+    context: ./backend/basic-pitch
+  networks:
+    - model-network
+  ports:
+    - "8090:8090"
+  env_file:
+    - .env
+```
+
+`basic-pitch` runs on my local port `8090`, and I'm able to pass in secrets and environmental variables into the container without having to declare them over and over, as I use them in all the containers.
+
+### Example
+
+Lets say I just made a change in `api` and `basic-pitch`. I can rebuild only those containers and spin them up with just two commands:
+
+```bash
+docker compose build api basic-pitch
+docker compose up api basic-pitch crepe
+```
+
+### Run all projects
+
+To run all of the containers in the `docker-compose.yml` file, simply run this from inside of the `/project` directory:
+
+```bash
+docker compose up
+```
 
 ## Frontend
 
 ### Libraries Used
 
-The frontend was written using React[@reactb] and uses Vite[@vite] for the docker/production build. I was already familiar with React, as I use it at my day job, and thought it would be the easiest way for me to make the frontend quickly.. The main styling and core components were built using React Bootstrap[@reacta]. I used abcjs[@abcjs] for rendering abc notation, and for
+The frontend was written using React[@reactb] and uses Vite[@vite] for the docker/production build. I was already familiar with React, as I use it at my day job, and thought it would be the easiest way for me to make the frontend quickly.. The main styling and core components were built using React Bootstrap[@reacta]. I used abcjs[@abcjs] for rendering abc notation, and for creating the MIDI playback for the displayed exercise.
+
+### structure
+
+```text
+- api/
+- components/
+- pages/
+- public/
+- App.tsx
+- index.tsx
+```
+
+#### api
+
+contains methods for calling the main `api` project. It forces the exact request types and responses that will be coming from each endpoint.
+
+#### components
+
+contains all of the components that make up the application. Examples include:
+
+- `<Navigation /`>: The navigation bar at the top of the page.
+- `<Recorder />`: Handles all of the audio input into the app. Select an audio device, upload audio, and the button to analyze the audio
+- `<Music />`: Renders ABC Notation, renders feedback from the analyze function, and has the generated audio playback functionality
+- `<MusicContext />`: Stores the current abc string, and feedback array. Is used in other components that need to access or modify abc/feedback.
+- _Modals_ Both the _Manual ABC Creation Modal_ and the _Generate Music Modal_ popups
+- _Forms_ The forms that are displayed in the modals
+
+#### pages
+
+There's only one file in here, and that's `home.tsx`. This file holds all of the core components needed to render the page.
+
+#### public
+
+Contains only `vmsg.wasm`, the Web Assembly[@webassembly] binary required for the `vmsg` package to work. `vmsg` ensures that the recordings sent to the backend are in `.mp3 format`, an issue that caused me many hours of lost time!!
+
+#### `app.tsx`
+
+Hosts the main wrapper for the application, including the `<Navigation/ >`, and the `<Music />`
+
+#### `index.tsx / index.html`
+
+The default landing page, and the entry point into the whole application.
+
+#### other
+
+The `package.json` and `package-lock.json` are in `src`. There are also a few helper files, such as `eslint.config.ts`, which ensures formatting and linting happens each time I save a file. There's also vite testing configuration files, that currently do _Nothing!_ as I didn't get to any frontend unit testing.
+
+I decided to use TypeScript[@typescript] so that all of the components could have strong typing. This makes it much easier when using shared methods, as the TypeScript compiler will freak out if anything is left untyped.
+
+This app has the same structure as the other docker files, but it doesn't currently work in the docker container. It's on my list of future TODOs!
 
 ## Main Backend API
+
+This is the API that communicates with the frontend, and with all of the model containers. The backend api also handles the main analysis function for
+
+### dependencies
+
+The backend API has a few packages that are different from the model container, including `httpx` to make async requests to the other models, music analysis and utility libraries `librosa`, `pretty_midi`, `mir_eval`, `muspy` and `music21`.
+
+### Routers
+
+There are routers for each of the model containers:
+
+- `basic_pitch.py`
+- `crepe.py`
+- `music_to_text.py`
+- `utilities.py`
+  - Used to create visualizations
+  - As of writitng this report, it has the method to create an image from the `MIDI` file returned from `basic-pitch`
+
+All of the routes use `httpx` to make requests to the model APIs. The majority of them are simple build request, wait for response, return response kind of files.
+
+### `main.py`
+
+Contains the main logic to startup a `FastAPI`[@fastapi] server, and add all of the routers to it.
+
+It has two routes: a `hello world` route, and the `analyze` route. The analyze route handles processing the user's submitted audio file, and sends it to the `analyze` component.
+
+Also has all wildcard `CORS` policy, which is not great, but it allows me to debug locally efficently! This needs to be removed if this app ever gets deployed.
+
+### Components
+
+#### abc_utils.py
+
+A few helper functions to help validate and parse the ABC Notation strings that are returned from `music-to-text`.
+
+The `ensure_default_note_length` method adds a normally missing property back into ABC strings. The `abc_to_midi` method uses `music21` to generate a baseline MIDI file to be used to compare against what basic_pitch creates. I'm not happy with this method, and it's on my list of things to fix.
+
+#### analyze.py
 
 ## Model APIs
 
 All of the model containers follow the same basic flow, using a version of python that meets the main package requirements, FastAPI for calling the model, and MLFlow for logging each experiment.
 
+Each of the model containers has its own python runtime, its own set of dependencies,
+
 ### Basic-Pitch API
+
+#### The base container
+
+The basic-pitch documentation recommends `python 10` for running the model. The basic-pitch model gets downloaded directly into the container using this line:
+
+```bash
+RUN apt-get update && apt-get install -y curl && \
+    curl -L https://github.com/spotify/basic-pitch/raw/refs/heads/main/
+    basic_pitch/saved_models/icassp_2022/nmp.onnx -o ./nmp.onnx
+```
+
+I chose to use the onnx model, as it was the model that required the least amount of dependencies.
+
+#### The API
+
+Aside from the hello world endpoint, there's the `/midi` endpoint which does all logic for running basic pitch. `/midi` expects the audio file that it's going to convert.
+
+Before any conversion begins, an _MLFlow_ experiment is started, and logs all of the parameters.
 
 ### Text-To-Music API
 
 ### CREPE API
 
-### User feedback
+### MLFlow
 
-<!-- TODO: Talk about -->
+## At a high level
 
-# Evaluation - X words
+There are two main actions that a user of Sight Reader Pro does:
 
-<!-- TODO: add evaluation word length -->
+- Generate sight-reading exercises
+- Analyze sight-reading exercises
+
+The following picture shows the major API calls that happen between the containers to create exercises and analyze audio:
+
+![Core Functionality API Calls](images/coreRequests.png){width=500px}
+
+# Evaluation (X/2500 words)
+
 <!-- Describe the evaluation carried out (e.g. user studies or testing on data) and give the results. You should also justify your choices in your approach to obtaining and analysing the results. Your evaluation should give a critique of the project as a whole, highlighting successes, failures, limitations and possible extensions. (max 2500 words) -->
 
 ## Model Evaluation
@@ -353,18 +524,17 @@ One of the core parts of choosing this project template was model evaluation. My
 - Can the model generate a variety of music styles?
 - Can the model
 
-### MusicGen
-
-- Kinda sucked. Took Forever.
-
-### NotaGen
+### Chat Musician
 
 - Also kind of sucked.
 
 ### Text2Midi
 
-- This model took forever.
-- The model took ~2 hours to generate anything worth while.
+_notebook for my exploration is at `project/model_exploration/text2midi.ipynb`_
+
+This is the only text-to-midi model that I tried. It took almost 2 hours to run inference in a google colab space. There were some issues with the example code that I tried causing an error when trying to run the decoder and create the midi file.
+
+The inference time and the amount of compute made me say no to this model.
 
 ### Text To Music
 
@@ -373,6 +543,8 @@ One of the core parts of choosing this project template was model evaluation. My
 
 <!-- IMAGE OF INFERANCE FROM LAST 10 RUNS -->
 <!--  -->
+
+## Selected Models
 
 ## Failed Approaches
 
@@ -390,7 +562,7 @@ Earlier on in this project, I was playing around with the idea of using Transfor
 
 ## Extensions
 
-# Conclusion - X words
+# Conclusion (X/1000 words)
 
 <!-- TODO: add Conclusion word length -->
 <!-- This can be a short summary of the project as a whole but, it can also bring out any broader themes you would like to discuss, or suggest further work. (max 1000 words) -->
