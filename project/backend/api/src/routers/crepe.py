@@ -4,7 +4,6 @@ import httpx
 import json
 from fastapi import APIRouter, UploadFile, File
 from fastapi.responses import JSONResponse
-import av
 
 logger = logging.getLogger(__name__)
 

@@ -39,26 +39,19 @@ async def pitchTracker(audio: UploadFile = File(...)):
 
     mlflow.set_experiment("CREPE-frequency-prediction")
 
-    with mlflow.start_run() as run:
-        audio_bytes = await audio.read()
+    with tempfile.NamedTemporaryFile(
+        suffix=".wav",
+        delete=False
+    ) as temp:
+        temp.write(await audio.read())
+        audio_path = Path(temp.name)
 
-        container = av.open(BytesIO(audio_bytes))
-        stream = container.streams.audio[0]
+    try:
+        sr, audio_data = wavfile.read(audio_path)
 
-        frames = []
-
-        for frame in container.decode(stream):
-            frames.append(frame.to_ndarray())
-
-        audio_data = np.concatenate(frames, axis=1)
-
-        # Convert to mono
-        if audio_data.shape[0] > 1:
-            audio_data = np.mean(audio_data, axis=0)
-        else:
-            audio_data = audio_data[0]
-
-        sr = stream.rate
+        # Convert stereo -> mono
+        if audio_data.ndim > 1:
+            audio_data = np.mean(audio_data, axis=1)
 
         mlflow.log_params({
             "step_size": 10,
@@ -102,6 +95,9 @@ async def pitchTracker(audio: UploadFile = File(...)):
             "sample_rate": sr,
             "predictions": predictions,
         }
+
+    finally:
+        audio_path.unlink(missing_ok=True)
 
 
 @app.post("/pitch-tracker-image")

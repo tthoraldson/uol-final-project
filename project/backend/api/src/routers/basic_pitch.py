@@ -3,6 +3,9 @@ import os
 import httpx
 import json
 from fastapi import APIRouter, UploadFile, File, Response
+from io import BytesIO
+import librosa
+import soundfile as sf
 
 
 logger = logging.getLogger(__name__)
@@ -32,7 +35,25 @@ async def getMidi(audio: UploadFile = File(...)):
 async def generate_midi(audio: UploadFile) -> bytes:
     await audio.seek(0)
 
-    audio_data = await audio.read()
+    audio_bytes = await audio.read()
+
+    # convert input to wav
+    audio_data, sr = librosa.load(
+        BytesIO(audio_bytes),
+        sr=None,
+        mono=True,
+    )
+
+    wav_buffer = BytesIO()
+
+    sf.write(
+        wav_buffer,
+        audio_data,
+        sr,
+        format="WAV",
+    )
+
+    wav_buffer.seek(0)
 
     async with httpx.AsyncClient(timeout=120.0) as client:
         response = await client.post(
@@ -40,7 +61,7 @@ async def generate_midi(audio: UploadFile) -> bytes:
             files={
                 "audio": (
                     audio.filename,
-                    audio_data,
+                    wav_buffer,
                     audio.content_type,
                 )
             },

@@ -39,11 +39,13 @@ function GenerateMusicModal(props: ModalProps) {
           <MusicGenerationForm
             onSubmit={async (values) => {
               setCurrentlyGenerating(true);
-              console.log(values);
-              //   todo: update prompt
-              const result = await generateMusic(
-                "This is a simple song. Like kids music.",
-              );
+              // TODO: Better prompt handling... this doesn't get great results
+              const prompt = `
+        This is a ${values.difficulty} ${values.genre} piece
+        for ${values.instrument}.
+        ${values.prompt}
+      `.trim();
+              const result = await generateMusic(prompt);
               setResAbc(result);
               setFormMusicState(true);
               setCurrentlyGenerating(false);
