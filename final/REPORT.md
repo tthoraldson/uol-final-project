@@ -1,37 +1,34 @@
 ---
 title: "Sight Reading Pro"
-subtitle: "Final Project Report - X words"
+subtitle: "Final Project Report - X/10500 words"
 author: "Theresa Thoraldson"
 date: 2026-09-28
 bibliography: references.bib
 toc: true
 toc-depth: 2
+abstract: |
+  This report describes the motivation, literature review, design, implementation, and evaluation of Sight Reading Pro, a full-stack machine learning application for sight-reading practice. The template for this project is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal. This project code be found here: [https://github.com/tthoraldson/uol-final-project/](https://github.com/tthoraldson/uol-final-project/)
 ---
 
 \newpage
-This project code be found here: [https://github.com/tthoraldson/uol-final-project/](https://github.com/tthoraldson/uol-final-project/)
 
-<!-- TODO: Add total word count to subtitle -->
-
-# Introduction - X words
+# Introduction - (720/1000 words)
 
 <!-- An introduction: this explains the project concept and motivation for the project (this can be based on your proposal). This must also state which project template you are using (max 1000 words). -->
 
-_The template I am choosing is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal._
+_The template I have chosen is Artificial Intelligence Project Template 1: Orchestrating AI Models to Achieve a Goal._
 
 In music, there is a concept called sight-reading. It involves being given a piece of sheet music and trying to play or sing it right away with little or no preparation. According to the National Association for Music Education, the ability to sight-read music has many benefits including increased confidence, stronger foundations in rhythm and pitch, and less stress when it comes to learning new music pieces [@empowering].
 
 ## An overview
 
-"Sight Reading Pro", the name of this project, will be an application where users can practice and master sight-reading. Users will be able to use any instrument of their choosing, including voice, to practice their sight-reading abilities.
+"Sight Reading Pro", is an application where users can practice and master sight-reading. Users can use any instrument of their choosing, including voice, to practice their sight-reading abilities.
 
 ![Example sight-reading passage](images/passage.png){width=300px}
 
-Sight Reading Pro will be a web based application, utilizing various state of the art machine learning models to generate music passages for users to practice their sight-reading abilities. The user will get immediate feedback on attempts, including intonation (did they play the correct note?) and rhythm (did they play at the correct time?).
+Sight reading pro is a web application along with multiple APIs, utilizing various state of the art machine learning models to generate music passages for users to practice their sight-reading abilities. The user gets
 
-Users can choose whether they want to have an account or not. If they choose to have an account, they can keep track of all of the passages they've generated, and their recorded attempts and feedback on each passage.
-
-Users with or without a login will be able to customize the complexity and difficulty of the generated passages using settings. Users will also be able to select between different styles of passages, such as classical or jazz.
+Users can customize the complexity and difficulty of the generated passages using settings. Users can also select between different styles of passages, such as classical or jazz.
 
 ## Why Would People Want This Project?
 
@@ -59,7 +56,7 @@ Sight reading factory allows you to keep track of what passages you have generat
 
 I believe the biggest disadvantage to Sight Reading Factory is the fact that it's a subscription, and starts at $45 per user per year. There's a free trial, but you have to enter credit card information in order to try it.
 
-Sight Reading factory supports 30 instruments, but has no generic option if your instrument is not supported. You must log in to do anything, which can be just enough friction for learners that want to try sight -eading without committing to a product. This product is also heavily influenced by music educators, and a lot of the features are what you would expect to be in a classroom environment. For example, getting assigned passages to work on.
+Sight Reading factory supports 30 instruments, but has no generic option if your instrument is not supported. You must log in to do anything, which can be just enough friction for learners that want to try sight-reading without committing to a product. This product is also heavily influenced by music educators, and a lot of the features are what you would expect to be in a classroom environment. For example, getting assigned passages to work on.
 
 ### sightreading.training
 
@@ -75,7 +72,9 @@ sightreading.training supports MIDI, or allows the user to play on a piano that'
 
 sightreading.training only supports MIDI and the virtual piano. If you have an instrument that you can't plug into your computer, you can't use this application. There are no settings to change rhythmic complexity. All of the notes have the same length.
 
-# Literature Review - X words
+\newpage
+
+# Literature Review (1903/2500 words)
 
 <!-- TODO: Add Literature Review Word Count -->
 <!-- this is a revised version of the chapter from your draft report, to include any further work you may have done since then, and to incorporate the feedback you have obtained from your submissions. (max 2500 words) -->
@@ -86,9 +85,9 @@ Understanding sight-reading, and how to improve this ability has been an area of
 
 In more recent times, a review was done on AI-education research related to music education. It concludes that "AI is under-utilized for generation despite its potential for education"[@carnovalini2025personalized]. The music generation part of the literature review goes deeper into music generation related to music exercises for general technical improvement.
 
-## Pitch Estimation, Tempo Estimation, Audio Evaluation
+## Pitch Estimation, Tempo Estimation, Audio Evaluation Models
 
-There are lots of existing pre-trained models available that do different tasks related to music. This is an overview of the models I found most relevant to this project, and the models that I will test for usage in this project.
+There are lots of existing pre-trained models available that do different tasks related to music. This is an overview of the models I found most relevant to this project, including the models that I ended up using.
 
 ### CREPE
 
@@ -100,7 +99,7 @@ There is also a demo of CREPE[@crepea] that runs fully in the browser using Tens
 
 TempoCNN[@schreiber2018singlestep] is a group of Convolutional Neural Network (CNN) models that estimate a given audio file's tempo, measured in beats per minute (BPM). These modes were trained on datasets that included mainly ballroom dancing music, and electronic dance music. This paper does note that there is a lack of various genres of music, including jazz, classical or reggae, and believes that the models would perform better if they had found and included this kind of data.
 
-For my project "Sight Reader Pro", I believe TempoCNN is a good candidate model for being able to automatically detect the tempo that the user's recording was played at, and also use it for giving feedback on a given passage.
+For my project I believe TempoCNN is a good candidate model for being able to automatically detect the tempo that the user's recording was played at, and also use it for giving feedback on a given passage.
 
 ## Music Generation
 
@@ -112,7 +111,7 @@ I believe Basic Pitch is a good candidate model that I can use to create backing
 
 ### MusicGEN
 
-In "Simple and Controllable Music Generation", Meta AI describes a Language Model called MusicGEN[@copet2024simple]. MusicGEN is capable of taking a text based input, and generating a full song. This model can also be prompted with an existing melody and a text prompt, and output a song based on the original melody.
+MusicGEN[@copet2024simple] is capable of taking a text based input, and generating a full song. This model can also be prompted with an existing melody and a text prompt, and output a song based on the original melody.
 
 This series of models is promising for offering customized backing tracks for generated sight-reading exercises. The exercises could be tailored to include the correct genre of backing track.
 
@@ -120,29 +119,100 @@ While the music generated is really high quality, the models are also large and 
 
 ### NotaGen
 
-NotaGen[@wang2025notagen] is a model that generates classical sheet music. The paper proposes a new "ClaMP-DPO" method for reinforcement learning, which increases musicality when compared to traditional human annotation or predefined rewards.
+NotaGen[@wang2025notagen] is a model that generates classical sheet music. The paper proposes a new "ClaMP-DPO" method for reinforcement learning, which increases musicality when compared to traditional human annotation or predefined rewards. CLaMP 2[@wuclamp] is a multi-modal music information retriever that was trained across 101 languages. NotaGen uses CLaMP 2 in it's reinforcement learning ClaMPD-PO, where it takes the CLaMP model to do iterative optimization, and then DPO[@lewis2019bart].
 
 This model requires at least 8GB of GPU RAM to run the smallest model. One goal of "Sight Reader Pro" is to have low response times for any generative process. Because of the large compute requirements for NotaGEN, I don't believe it will be a good fit for the project.
 
 ### Text To Music
 
-<!-- TODO: Add overview of text to music model -->
+_text-to-music_[@2022sanderwood] is a model that takes in a prompt, and produces ABC notation[@abc] from that prompt. It's a BART[@lewis2019bart] based model that has been finetuned with a dataset similar to wikimusictext[@2026sanderwood]. I find this to be one of the more compelling models, as the prompt examples contain the same kind of natural language that I'm looking to use in Sight Reader Pro:
+
+```text
+Example training prompts for text-to-music, directly
+from model card on hugging face:
+
+- This is a traditional Irish dance music. Note Length-1/8
+  Meter-6/8 Key-D
+- This is a jazz-swing lead sheet with chord and vocal.
+```
+
+I find the ability to use natural language to prompt for specific time signatures and music styles to fit perfectly with that I'm going to build with Sight Reader Pro. I also like that the output is in ABC format, which is just plain text. This makes it easy to store, and easy to process.
+
+The training dataset used also contained the genre of music for each tune it was trained on, which is an important feature to have for when I generate prompts for creating new music.
 
 ### Chat Musician
 
+Chat Musician[@yuan2024chatmusiciana] is a 4 billion paramter model based on LLAMA2[@touvron2023llama] that takes natural language prompts, and can do three tasks: Music Theory QA, Composing (using ABC notation[@abc]), and chatting. They created their own dataset, which they call _Music Pile_, that includes a variety of information outside of music including Wikipedia[@2025wikimedia], Irishman[@wutunesformer], and synthetic music data that they created using Chat-GPT 4[@openai2024gpt4]. The model performs extremely well on music understanding, music reasoning and music knowlege tasks. The paper talks about music generation as a way to compress music data into the ABC format for better compression, but doesn't talk about music generation as it's own goal.
+
 ### Text2Midi
+
+Text2Midi[@text2midi] is an LLM that generates midi files from text descriptions. It takes LLM Embeddings from the text description, then uses a Transformer decoder to generate tokes that are then converted to a midi file.
+
+MIDI[@2026midi] is a standard interface to define communication between instruments and a computer. MIDI can be live, like using a keyboard as a MIDI input, or MIDI can be a file format that's used to define the pitch, rhythm and tone of an instrument or an ensemble.
+
+Using MIDI as a way to generate music seems like an interesting approach. There seems to be a handful of libraries that can handle MIDI to ABC notation and vice versa, but that doesn't seem to the the norm. I still want to experiment with generative MIDI models, as they have the potential to generate different music from the text to ABC style models listed above.
+
+### MidiLLM
+
+Similar to Text2Midi, MidiLLM[@wu2025midillm] is an LLM that produces MIDI. Text2Midi is based on Llama 3[@grattafiori2024llama]. It uses a two stage training process so that the model can understand text related to music, and also MIDI. MidiLLM outperforms Text2Midi on the TheoryTab dataset[@donahue2022melody], which specializes in multitrack music generation. This model is compatible with the HuggingFace Transformers library[@wolf2020transformers].
+
+Considering my application is for sight-reading, which is a solo task, I don't believe using a model that specializes in creating MIDI for ensembles .
+
+### AudioGen
+
+AudioGen[@kreuk2023audiogen] is an auto-regressive generative model that creates audio samples based on text prompts. It was trained on a variety of different . The public model found on HuggingFace[@2023facebook] has 1.5 billion parameters.
+
+One of my original ideas for Sight Reader Pro was to have the ability to create backing tracks for the generated sight-reading exercises. While I could also generate midi for this task, having more realistic audio that sounds like a real guitar, or a reach orchestra seems appealing.
+
+My main worry with this model, similar to MusicGen[@copet2024simple], is that it's too large, and too computationally expensive to use alongside simple, ABC notation based sight reading exercises. It would be cool to incorporate something like this into a base set of exercises on Sight Reading Pro in the future, where the ABC and backing track are already generated, but this will not work for on the fly sight-reading exercise generation.
 
 ## Other Models
 
-### QWEN ONNX
+### Qwen, Qwen ONNX
+
+Qwen3[@yang2025qwen3] is an open source LLM, and is a popular alternative to both Chat GPT and Claude. It can
+
+On HuggingFace, there's an ONNX Runtime[@onnxa] implementation of Qwen3[@onnxcommunity], having 0.6 billion parameters. ONNX Runtime can run models both on mobile devices and directly in the browser. Having a cross-platform compatible model for any conversation or retrival tasks could be nice! And using something like TensorflowJS[@tensorflowjs] or TransformersJS[@2026huggingface] to run Qwen 3 directly in the browser is appealing.
+
+I believe this would be more of a stretch feature than anything I would include in this iteration of Sight Reader Pro.
+
+### Llama
+
+Llama 2[@touvron2023llama] and Llama 3[@grattafiori2024llama] are a series of LLMs put out by Meta. As listed above, they're commonly used as base models for building fine tuned and task specific models. The Llama series is great at typical LLM tasks like conversation and retrival (Just like Qwen!).
+
+Similar to Qwen 3, using a Llama model directly is a stetch feature.
+
+## Libraries
+
+### Librosa
+
+Librosa[@mcfee2015librosa] is a python library that has lots of audio processing functions. It offers pre-made models for tasks like onset detection, rhythm features, pitch and tuning, onset detection, and much more.
+
+I plan on using librosa to validate the results of some of the larger models I'll be using. Librosa can handle beat tracking and tempo related tasks, and it also has an implementation of PyiN[@mauch2014pyin], a frequency estimator does the same task as CREPE[@crepeb], as mentioned aboce.
+
+### music21
+
+"music21[@what] is a Python-based toolkit for computer-aided musicology." It has tons of helper methods to convert between common types (abc -> midi), It has has a large corpus of various free music in different formats for testing. I believe this library will be helpful for quickly converting between music formats, and maybe finding some testing data.
+
+### muspy
+
+muspy[@dong2020muspy][@muspy] is library mainly focused on creating music analysis related pipelines, and facilitating music i/o between other popular music formats and libraries. It supports both ABC notation[@abc] and MIDI, along with many more. It also has it's own set of muspy specific classes, focused on symbolic music representation.
+
+This library will be helpful if I want to explore storing the sight-reading exercises in a more symbolic way, and it could also be helpful for it's music i/o functions
+
+### mir_eval
+
+mir_eval[@raffeltransparent][@mir_evala] describes itself as " Python library which provides a transparent, standardized, and straightforward way to evaluate Music Information Retrieval systems." It has tons of methods specifically for Music Information Retrival, including tempo validation, key detection, and segmentation.
+
+This library will be extremely useful in helping to evauluate how well my selected models perform, and to calculate metrics for users sight-reading exercise attempts.
 
 ## The Research Gaps
 
-<!-- TODO: Write about the lack of sight reading tools with these genrative tools -->
+While there are many _text-to-music_ machine learning models that satisfy generating new sight-reading exercises, there is a lack of applications that put it to use in real time. There is also a lack of using the AMT style tools and models to produce feedback on sight reading exercises. The two main solutions (Sight Reading Factory[@sighta] and sightreading.training[@sight]) don't have the ability to customize exercises based on genre, or any prompt for that matter.
 
-While there are
+\newpage
 
-# Design - X words
+# Design - (X/2000 words)
 
 <!-- TODO: Add design word count -->
 <!-- this is a revised version of the relevant chapter from your draft report, again incorporating appropriate feedback and any changes you may have made to your design based on feedback given on previous submissions. (max 2000 words) -->
@@ -151,57 +221,75 @@ _As stated in the intro, the template I am choosing is Artificial Intelligence P
 
 ## Domain and Project Users
 
-The goal of this project is to create a sight-reading web application that utilizes various machine learning models to create unique sight-reading exercises. The _target user_ for this project is an independent musician that's looking to improve their sight-reading abilities, and is interested in a customized experience based on their instrument of choice, skill level and music genre of choice. The _domain_ of this project could be considered to be music education, but I'm aiming for it to be specifically independent music education.
+<!-- This section has been proof read. -->
+
+The goal of this project was to create a sight-reading web application that utilizes various machine learning models to create unique sight-reading exercises. The _target user_ for this project is an independent musician that's looking to improve their sight-reading abilities, and is interested in a customized experience based on their instrument of choice, skill level and music genre of choice. The _domain_ of this project could be considered to be music education, but I'm aiming for it to be specifically independent music education.
 
 This project is not ideal for users just learning an instrument, as this application requires at least an elementary understanding of reading sheet music, and playing their instrument of choice.
 
+In my initial feedback survey on the mockups, there was almost an even split of people who were musicians, and people who were not. I believe this is the best kind of feedback, as I can iterate on my feeatures to work for everyone who may want to try sight-readng, not just the experts.
+
+![Initial Design Survey: Musician Question](images/questionare1.png){width=400px}
+
+I also asked if users were familiar with the concept of sight-reading. Surprisingly, the majority did! I believe this validates the name, _Sight Reader Pro_, as something that could be recognizable.
+
+![Initial Design Survey: Sight Reading Question](images/questionare2.png){width=400px}
+
 ## Design Overview
 
-The designs below are what an minimum viable product for this project will look like. They have all of the bare minimum functionality, and nothing more.
+The designs below are both my initial mockups for what Sight Reader Pro might look like, and the final version.
 
-### Home / Landing Page
+### Home Page
 
-![Sight Reading Pro Home Mockup](images/home.png){width=500px}
+![Sight Reading Pro Home Initial Design Mockup](images/home.png){width=500px}
 
-The home page will be a simple call to action to start practicing right now. The user can pick from generating another random exercise, or practice the one displayed right now. There will be no option to customize exercises from the home screen. If "practice now" is clicked, they will be taken to the main practice screen.
+In the inital mockup phase, I was planning on implementing a home page that had the majority of the functionality of the exercise page, but with some marketing flare for first time visitors. After I got into implementing the app, I decided to ax creating a different home page. The exercise page is the only page, and all of the functionality of the final Sight Reading Pro happens there.
+
+![Sight Reading Pro: Home Initial Design Mockup](images/home.png){width=500px}
 
 ### Before Recording Exercise Attempt
 
-![Sight Reading Pro Exercise Practice Before Attempt](images/exercise-before.png){width=500px}
+![Sight Reading Pro Exercise Before Attempt](images/exercise-before.png){width=500px}
 
-The exercise page before an attempt is very clean, only including two options: connect to an audio source and record an attempt. If the user selects the record, the record button will switch to a stop button. After the stop button is selected, the screen will update to the "after recording exercise attempt" screen. If the user doesn't have an audio source selected, they will not be able to record an attempt.
+The mockup exercise page before an attempt is very clean, only including two options: connect to an audio source and record an attempt. If the user selects the record, the record button will switch to a stop button. After the stop button is selected, the screen will update to the "after recording exercise attempt" screen. In this mockup, there was no option to upload audio.
 
-After I conduct more user interviews I will determine if there is a need for an audio upload option.
+#### User Feedback
+
+![Initial Design Survey: Exercise Before Attempt Feedback](images/questionare3.png){width=500px}
+
+The majority of the users surveyed agreed that the options of this page were easy to understand. There was no freeform feedback on this screen.
+
+#### Final Design
+
+![Sight Reading Pro Exercise Before Attempt, Final](images/exerciseBeforeFinal.png){width=500px}
+
+The final design ended up adding a few new things. There is a midi playback, that's part of the ABCJS[@abcjs] package, and creates a playback of what the exercise sounds like. Considering how easy this feature was to add (It was two lines in the frontend), I thought it would be worth adding in.
+
+The second new feature on this view is the ability to add ABC notation manually. This feature became important for full-stack testing towards the end of creating this project. The music that was being generated was too difficult for me to play, and I wanted to be able to test the same exercise repetedly after the state of the application had changed.
+
+![Sight Reading Pro: Add Manual ABC](images/manualAbc.png){width=500px}
 
 ### After Recording Exercise Attempt
 
-![Sight Reading Pro Exercise Practice After Attempt](images/exercise-after.png){width=500px}
+![Sight Reading Pro Mockup: Exercise Practice After Attempt](images/exercise-after.png){width=500px}
 
 This screen is extremely similar to the before exercise attempt screen, but with feedback added from the previous attempt. More feedback will be included based on settings selected, including tempo, rhythm accuracy, etc.
 
 ### Generate New Exercises
 
-![Sight Reading Pro New Exercise](images/generate.png){width=500px}
+![Sight Reading Pro Mockup: New Exercise](images/generate.png){width=400px}
 
-In the mockup I have two settings to choose from, a difficulty slider and a genre selector. There will be more settings that I did not include in the mockup, such as:
+In the mockup I have two settings to choose from, a difficulty slider and a genre selector. I envisioned many more settings, but only ended up adding support to select from a list of common instruments.
 
-- Tempo
-- Key Signatures
-- Melody Complexity (note type selectors)
-
-### Exercise History
-
-![Sight Reading Pro User Exercise History](images/exercise-list.png){width=500px}
-
-This mockup shows the Exercise History screen. This screen has all of the exercises that the user has ever generated. The user has the ability to go to an exercise, or to delete it from the list. In this mockup I'm using cards to display each exercise that has been generated.
+![Sight Reading Pro Mockup: New Exercise](images/generate.png){width=500px}
 
 ## Design Choices
 
-<!-- TODO: Why did we make the choices we did? How will these choices best fufil the needs of the users? -->
+### Keep it simple
 
-## User Feedback
+Using lots of
 
-### Good experience with or without an account
+### Good experience without
 
 My main goal is to reduce friction in users trying out Sight Reader Pro. All of the core functionality will be in the exercise page if a user is logged in or if they're anonymous.
 
@@ -209,12 +297,16 @@ My main goal is to reduce friction in users trying out Sight Reader Pro. All of 
 
 The settings to generate sight-reading exercises will allow users to generate exercises that are specific to them. For example, I only would want to see bass clef exercises that have a jazzy theme. Each user will be able to "choose their own adventure" for what kind of sight-reading experience they want.
 
-# Implementation - X words
+\newpage
+
+# Implementation (X/2500 words)
 
 <!-- TODO: add word count -->
 <!-- this should describe the implementation of the project. This should follow the style of the topic 6 peer review (but greatly expanded to cover the entire implementation), describing the major algorithms/techniques used, explanation of the most important parts of the code and a visual representation of the results (e.g. screenshots or graphs). (max 2500 words) -->
 
 ## Overview
+
+![Core Functionality API Calls](images/coreRequests.png){width=500px}
 
 ## Docker
 

@@ -124,7 +124,7 @@ function Recorder({ onRecordingComplete }: AudioRecorderProps) {
 
   async function analyzeRecording() {
     if (!recordingBlob) {
-      console.warn("we here");
+      console.warn("we here, blob bugs once more");
       return;
     }
 

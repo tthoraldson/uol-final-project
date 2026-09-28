@@ -1,0 +1,15 @@
+@startuml 
+Frontend -> "Backend API": Generate music request
+"Backend API" -> "text-to-music API": Generate music request
+"text-to-music API" -> "Backend API": Generate music response
+"Backend API" -> Frontend: Generate music response
+
+Frontend -> "Backend API": Analyze music request
+"Backend API" -> "crepe API": Generate Frequency Distribution request
+"crepe API" -> "Backend API": Frequency Distribution response
+"Backend API" -> "basic-pitch API": Generate MIDI request
+"basic-pitch API" -> "Backend API": Generate MIDI response
+"Backend API" -> "Backend API": Run analysis on model responses
+"Backend API" -> Frontend: Analysis response
+
+@enduml
